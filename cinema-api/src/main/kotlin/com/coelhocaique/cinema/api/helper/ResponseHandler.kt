@@ -3,7 +3,7 @@ package com.coelhocaique.cinema.api.helper
 import com.coelhocaique.cinema.api.helper.Messages.DEFAULT_ERROR_MESSAGE
 import com.coelhocaique.cinema.api.helper.exception.ApiException
 import com.coelhocaique.cinema.core.util.logger
-import org.springframework.web.reactive.function.BodyInserters.fromObject
+import org.springframework.web.reactive.function.BodyInserters
 import org.springframework.web.reactive.function.server.ServerResponse
 import reactor.core.publisher.Mono
 
@@ -27,7 +27,7 @@ object ResponseHandler {
         logger().error("error=".plus(it.message), it)
         return ServerResponse
             .status(500)
-            .body(fromObject(buildErrorResponse(it.message)))
+            .bodyValue(buildErrorResponse(it.message))
     }
 
     private fun mapApiException(it: ApiException): Mono<ServerResponse> {
@@ -37,16 +37,14 @@ object ResponseHandler {
         )
         return ServerResponse
             .status(it.type.status)
-            .body(fromObject(buildErrorResponse(it.messages)))
+            .bodyValue(buildErrorResponse(it.message))
     }
 
     private fun <T> success(it: T, status: Int): Mono<ServerResponse> {
         return ServerResponse
             .status(status)
-            .body(fromObject(it))
+            .body(BodyInserters.fromValue(it!!))
     }
 
     private fun buildErrorResponse(message: String?) = ErrorResponse(listOf(message ?: DEFAULT_ERROR_MESSAGE))
-
-    private fun buildErrorResponse(errors: List<String>) = ErrorResponse(errors)
 }

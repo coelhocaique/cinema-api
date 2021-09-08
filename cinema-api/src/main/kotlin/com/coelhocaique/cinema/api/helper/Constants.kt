@@ -7,8 +7,10 @@ object Messages {
     const val NOT_NULL = "%s must not be null."
     const val INVALID_REQUEST = "Invalid request body."
     const val INVALID_ID = "Invalid id."
+    const val INVALID_RATING_RANGE = "Rating range must be between 1 and 5."
 }
 
 object Fields {
     const val ID = "id"
+    const val RATING = "rating"
 }
