@@ -8,7 +8,6 @@ object DependencyVersions {
 plugins {
     application
     kotlin("jvm")
-    java
 }
 
 apply(plugin = "org.springframework.boot")

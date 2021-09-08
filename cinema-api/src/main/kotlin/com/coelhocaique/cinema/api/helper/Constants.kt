@@ -7,7 +7,6 @@ object Messages {
     const val NOT_NULL = "%s must not be null."
     const val INVALID_REQUEST = "Invalid request body."
     const val INVALID_ID = "Invalid id."
-    const val INVALID_REF_CODE = "Invalid reference_code."
 }
 
 object Fields {
