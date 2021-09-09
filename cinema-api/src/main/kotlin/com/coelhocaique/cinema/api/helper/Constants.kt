@@ -15,5 +15,5 @@ object Fields {
     const val MOVIE_ID = "movieId"
     const val RATING = "rating"
     const val PRICE = "price"
-    const val TIME = "time"
+    const val SESSION_DATETIME = "sessionDateTime"
 }

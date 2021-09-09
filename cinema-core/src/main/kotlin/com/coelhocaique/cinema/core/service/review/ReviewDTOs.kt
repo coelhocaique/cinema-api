@@ -1,4 +1,4 @@
-package com.coelhocaique.cinema.core.domain.review
+package com.coelhocaique.cinema.core.service.review
 
 import java.time.LocalDateTime
 import java.util.UUID

@@ -1,4 +1,4 @@
-package com.coelhocaique.cinema.core.domain.movie.client
+package com.coelhocaique.cinema.core.service.movie.client
 
 import com.coelhocaique.cinema.core.config.OmdbApiProperties
 import org.springframework.http.HttpHeaders

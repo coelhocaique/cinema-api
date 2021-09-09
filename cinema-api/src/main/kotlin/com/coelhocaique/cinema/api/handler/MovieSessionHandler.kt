@@ -5,8 +5,8 @@ import com.coelhocaique.cinema.api.handler.RequestParameterHandler.retrieveId
 import com.coelhocaique.cinema.api.handler.RequestParameterHandler.retrieveMovieId
 import com.coelhocaique.cinema.api.helper.RequestValidator.validate
 import com.coelhocaique.cinema.api.helper.ResponseHandler.generateResponse
-import com.coelhocaique.cinema.core.domain.session.MovieSessionRequest
-import com.coelhocaique.cinema.core.domain.session.MovieSessionService
+import com.coelhocaique.cinema.core.service.session.MovieSessionRequest
+import com.coelhocaique.cinema.core.service.session.MovieSessionService
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.server.ServerRequest
@@ -32,6 +32,6 @@ class MovieSessionHandler(private val movieSessionService: MovieSessionService) 
     fun delete(req: ServerRequest): Mono<ServerResponse> {
         return retrieveMovieId(req).zipWith(retrieveId(req))
             .flatMap { movieSessionService.delete(it.t2, it.t2) }
-            .let { generateResponse(it, onEmptyStatus = HttpStatus.NOT_FOUND.value(), successStatus = HttpStatus.NO_CONTENT.value()) }
+            .let { generateResponse(it, successStatus = HttpStatus.NO_CONTENT.value()) }
     }
 }

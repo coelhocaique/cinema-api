@@ -1,4 +1,4 @@
-package com.coelhocaique.cinema.core.domain.movie
+package com.coelhocaique.cinema.core.persistance
 
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document

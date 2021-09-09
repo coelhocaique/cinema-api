@@ -2,7 +2,7 @@ package com.coelhocaique.cinema.api.handler
 
 import com.coelhocaique.cinema.api.handler.RequestParameterHandler.retrieveId
 import com.coelhocaique.cinema.api.helper.ResponseHandler.generateResponse
-import com.coelhocaique.cinema.core.domain.movie.MovieService
+import com.coelhocaique.cinema.core.service.movie.MovieService
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.server.ServerRequest

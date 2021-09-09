@@ -1,8 +1,9 @@
-package com.coelhocaique.cinema.core.domain.session
+package com.coelhocaique.cinema.core.service.session
 
-import com.coelhocaique.cinema.core.domain.movie.MovieService
-import com.coelhocaique.cinema.core.domain.session.MovieSessionMapper.toMovieSessionDocument
-import com.coelhocaique.cinema.core.domain.session.MovieSessionMapper.toMovieSessionResponse
+import com.coelhocaique.cinema.core.service.movie.MovieService
+import com.coelhocaique.cinema.core.service.session.MovieSessionMapper.toMovieSessionDocument
+import com.coelhocaique.cinema.core.service.session.MovieSessionMapper.toMovieSessionResponse
+import com.coelhocaique.cinema.core.persistance.MovieSessionRepository
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Mono
 import java.util.UUID
@@ -21,7 +22,7 @@ class MovieSessionService(
     fun create(movieId: UUID, request: MovieSessionRequest): Mono<MovieSessionResponse> {
         return movieService.findById(movieId)
             .flatMap { toMovieSessionDocument(it.id, request) }
-            .flatMap { movieSessionRepository.save(it) }
+            .flatMap { movieSessionRepository.insert(it) }
             .flatMap { toMovieSessionResponse(it) }
     }
 

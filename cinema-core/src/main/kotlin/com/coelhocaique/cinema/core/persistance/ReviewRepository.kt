@@ -1,5 +1,6 @@
-package com.coelhocaique.cinema.core.domain.review
+package com.coelhocaique.cinema.core.persistance
 
+import com.coelhocaique.cinema.core.service.review.ReviewType
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository
 import reactor.core.publisher.Flux
 import java.util.UUID

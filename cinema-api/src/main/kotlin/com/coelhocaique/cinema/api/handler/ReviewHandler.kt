@@ -4,9 +4,9 @@ import com.coelhocaique.cinema.api.handler.RequestParameterHandler.extractBody
 import com.coelhocaique.cinema.api.handler.RequestParameterHandler.retrieveId
 import com.coelhocaique.cinema.api.helper.RequestValidator.validate
 import com.coelhocaique.cinema.api.helper.ResponseHandler.generateResponse
-import com.coelhocaique.cinema.core.domain.review.ReviewRequest
-import com.coelhocaique.cinema.core.domain.review.ReviewService
-import com.coelhocaique.cinema.core.domain.review.ReviewType
+import com.coelhocaique.cinema.core.service.review.ReviewRequest
+import com.coelhocaique.cinema.core.service.review.ReviewService
+import com.coelhocaique.cinema.core.service.review.ReviewType
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.server.ServerRequest

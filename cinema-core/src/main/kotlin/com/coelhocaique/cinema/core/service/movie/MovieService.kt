@@ -1,7 +1,8 @@
-package com.coelhocaique.cinema.core.domain.movie
+package com.coelhocaique.cinema.core.service.movie
 
-import com.coelhocaique.cinema.core.domain.movie.MovieMapper.toMovieResponse
-import com.coelhocaique.cinema.core.domain.movie.client.OmdbClient
+import com.coelhocaique.cinema.core.service.movie.MovieMapper.toMovieResponse
+import com.coelhocaique.cinema.core.service.movie.client.OmdbClient
+import com.coelhocaique.cinema.core.persistance.MovieRepository
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Mono
 import reactor.core.publisher.Mono.just

@@ -1,6 +1,7 @@
-package com.coelhocaique.cinema.core.domain.movie
+package com.coelhocaique.cinema.core.service.movie
 
-import com.coelhocaique.cinema.core.domain.movie.client.OmdbResponse
+import com.coelhocaique.cinema.core.service.movie.client.OmdbResponse
+import com.coelhocaique.cinema.core.persistance.MovieDocument
 import reactor.core.publisher.Mono.just
 
 object MovieMapper {

@@ -1,5 +1,6 @@
-package com.coelhocaique.cinema.core.domain.session
+package com.coelhocaique.cinema.core.service.session
 
+import com.coelhocaique.cinema.core.persistance.MovieSessionDocument
 import reactor.core.publisher.Mono.just
 import java.time.LocalDateTime
 import java.util.UUID
@@ -15,6 +16,7 @@ object MovieSessionMapper {
             price = document.price,
             room = document.room,
             time = document.time,
+            date = document.date,
             createdAt = LocalDateTime.now()
         )
     )
@@ -28,7 +30,8 @@ object MovieSessionMapper {
             movieId = movieId,
             price = request.price!!,
             room = request.room,
-            time = request.time!!,
+            time = request.sessionDateTime!!.toLocalTime(),
+            date = request.sessionDateTime.toLocalDate(),
             active = true,
             createdAt = LocalDateTime.now()
         )

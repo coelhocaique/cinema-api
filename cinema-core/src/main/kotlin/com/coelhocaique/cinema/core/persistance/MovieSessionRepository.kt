@@ -1,4 +1,4 @@
-package com.coelhocaique.cinema.core.domain.session
+package com.coelhocaique.cinema.core.persistance
 
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository
 import reactor.core.publisher.Flux
