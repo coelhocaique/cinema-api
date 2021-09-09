@@ -1,6 +1,7 @@
 package com.coelhocaique.cinema.api.handler
 
 import com.coelhocaique.cinema.api.helper.Fields.ID
+import com.coelhocaique.cinema.api.helper.Fields.MOVIE_ID
 import com.coelhocaique.cinema.api.helper.Messages.INVALID_ID
 import com.coelhocaique.cinema.api.helper.Messages.INVALID_REQUEST
 import com.coelhocaique.cinema.api.helper.exception.ApiException.ApiExceptionHelper.business
@@ -20,6 +21,14 @@ object RequestParameterHandler {
     fun retrieveId(req: ServerRequest): Mono<UUID> {
         return try {
             just(formatToUUID(req.pathVariable(ID)))
+        } catch (e: Exception) {
+            throw business(INVALID_ID)
+        }
+    }
+
+    fun retrieveMovieId(req: ServerRequest): Mono<UUID> {
+        return try {
+            just(formatToUUID(req.pathVariable(MOVIE_ID)))
         } catch (e: Exception) {
             throw business(INVALID_ID)
         }

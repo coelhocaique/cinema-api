@@ -11,8 +11,8 @@ data class MovieSessionDocument(
     @Id val id: UUID,
     val movieId: UUID,
     val price: BigDecimal,
-    val active: Boolean,
-    val startsAt: LocalDateTime,
-    val endsAt: LocalDateTime,
-    val createdAt: LocalDateTime
+    val room: String? = null,
+    val time: LocalDateTime,
+    val createdAt: LocalDateTime,
+    val active: Boolean
 )

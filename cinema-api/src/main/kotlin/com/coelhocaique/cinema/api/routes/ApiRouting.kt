@@ -1,6 +1,8 @@
 package com.coelhocaique.cinema.api.routes
 
 import com.coelhocaique.cinema.api.handler.MovieHandler
+import com.coelhocaique.cinema.api.handler.MovieSessionHandler
+import com.coelhocaique.cinema.api.handler.ReviewHandler
 import org.springframework.context.annotation.Bean
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.server.router
@@ -12,22 +14,18 @@ class ApiRouting {
     fun movieRoutes(handler: MovieHandler) = router {
         GET("/movies", handler::findAll)
         GET("/movies/{id}", handler::findById)
-        GET("/movies/{id}/reviews", handler::findReviews)
-        POST("/movies/{id}/reviews", handler::createReview)
     }
 
     @Bean
-    fun movieSessionRoutes(handler: MovieHandler) = router {
-        GET("/movies/{movieId}/sessions", handler::findAll)
-        POST("/movies/{movieId}/sessions", handler::findById)
-        PATCH("/movies/{movieId}/sessions/{id}", handler::findById)
-        DELETE("/movies/{movieId}/sessions/{id}", handler::findById)
+    fun movieReviewRoutes(handler: ReviewHandler) = router {
+        GET("/movies/{id}/reviews", handler::findMovieReviews)
+        POST("/movies/{id}/reviews", handler::createMovieReview)
     }
 
     @Bean
-    fun reviewRoutes(handler: MovieHandler) = router {
-        GET("/reviews", handler::findAll)
-        POST("/reviews", handler::findById)
+    fun movieSessionRoutes(handler: MovieSessionHandler) = router {
+        GET("/movies/{movieId}/sessions", handler::findByMovieId)
+        POST("/movies/{movieId}/sessions", handler::create)
+        DELETE("/movies/{movieId}/sessions/{id}", handler::delete)
     }
-
 }

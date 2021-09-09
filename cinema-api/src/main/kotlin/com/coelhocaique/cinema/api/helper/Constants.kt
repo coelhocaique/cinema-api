@@ -12,5 +12,8 @@ object Messages {
 
 object Fields {
     const val ID = "id"
+    const val MOVIE_ID = "movieId"
     const val RATING = "rating"
+    const val PRICE = "price"
+    const val TIME = "time"
 }

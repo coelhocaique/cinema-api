@@ -8,17 +8,17 @@ import reactor.core.publisher.Mono.just
 import java.util.UUID
 
 @Service
-class MovieService(private val repository: MovieRepository,
+class MovieService(private val movieRepository: MovieRepository,
                    private val omdbClient: OmdbClient) {
 
     fun findById(id: UUID): Mono<MovieResponse> {
-        return repository.findById(id)
+        return movieRepository.findById(id)
             .flatMap { omdbClient.retrieveMovieDetails(it.imdbId).zipWith(just(it)) }
             .flatMap { toMovieResponse(it.t2, it.t1) }
     }
 
     fun findAll(): Mono<List<MovieResponse>> {
-        return repository.findAll()
+        return movieRepository.findAll()
                     .flatMap { omdbClient.retrieveMovieDetails(it.imdbId).zipWith(just(it)) }
                     .flatMap { toMovieResponse(it.t2, it.t1) }
                     .collectList()
