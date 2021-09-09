@@ -12,7 +12,8 @@ data class MovieSessionResponse(
     val price: BigDecimal,
     val room: String?,
     val date: LocalDate,
-    val time: LocalTime
+    val time: LocalTime,
+    val links: List<Map<String, String>>? = null
 )
 
 data class MovieSessionRequest(

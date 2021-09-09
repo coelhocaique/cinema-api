@@ -3,6 +3,7 @@ package com.coelhocaique.cinema.api.handler
 import com.coelhocaique.cinema.api.handler.RequestParameterHandler.extractBody
 import com.coelhocaique.cinema.api.handler.RequestParameterHandler.retrieveId
 import com.coelhocaique.cinema.api.handler.RequestParameterHandler.retrieveMovieId
+import com.coelhocaique.cinema.api.helper.LinkBuilder.addMovieSessionResponseLinks
 import com.coelhocaique.cinema.api.helper.RequestValidator.validate
 import com.coelhocaique.cinema.api.helper.ResponseHandler.generateResponse
 import com.coelhocaique.cinema.core.service.session.MovieSessionRequest
@@ -19,6 +20,7 @@ class MovieSessionHandler(private val movieSessionService: MovieSessionService) 
     fun findByMovieId(req: ServerRequest): Mono<ServerResponse> {
         return retrieveMovieId(req)
             .flatMap { movieSessionService.findByMovieId(it) }
+            .flatMap { addMovieSessionResponseLinks(req, it) }
             .let { generateResponse(it, onEmptyStatus = HttpStatus.OK.value()) }
     }
 
@@ -26,12 +28,14 @@ class MovieSessionHandler(private val movieSessionService: MovieSessionService) 
         return extractBody<MovieSessionRequest>(req)
             .flatMap { validate(it).zipWith(retrieveMovieId(req)) }
             .flatMap { movieSessionService.create(it.t2, it.t1) }
+            .flatMap { addMovieSessionResponseLinks(req, it) }
             .let { generateResponse(it, successStatus = HttpStatus.CREATED.value()) }
     }
 
     fun delete(req: ServerRequest): Mono<ServerResponse> {
         return retrieveMovieId(req).zipWith(retrieveId(req))
             .flatMap { movieSessionService.delete(it.t2, it.t2) }
+            .flatMap { addMovieSessionResponseLinks(req, it) }
             .let { generateResponse(it, successStatus = HttpStatus.NO_CONTENT.value()) }
     }
 }

@@ -8,7 +8,8 @@ data class ReviewResponse(
     val movieId: UUID,
     val rating: Double,
     val comment: String?,
-    val createdAt: LocalDateTime
+    val createdAt: LocalDateTime,
+    val links: List<Map<String, String>>? = null
 )
 
 data class ReviewRequest(

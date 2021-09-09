@@ -9,5 +9,6 @@ data class MovieResponse(
     val imdbRating: Double,
     val released: String,
     val runtime: String,
-    val ratings: List<OmdbRatingsResponse>?
+    val ratings: List<OmdbRatingsResponse>?,
+    val links: List<Map<String, String>>? = null
 )
