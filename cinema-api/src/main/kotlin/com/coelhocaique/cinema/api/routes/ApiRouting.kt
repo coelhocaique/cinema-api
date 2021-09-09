@@ -18,8 +18,8 @@ class ApiRouting {
 
     @Bean
     fun movieReviewRoutes(handler: ReviewHandler) = router {
-        GET("/movies/{id}/reviews", handler::findMovieReviews)
-        POST("/movies/{id}/reviews", handler::createMovieReview)
+        GET("/movies/{movieId}/reviews", handler::findMovieReviews)
+        POST("/movies/{movieId}/reviews", handler::createMovieReview)
     }
 
     @Bean

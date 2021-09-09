@@ -12,12 +12,11 @@ data class MovieSessionResponse(
     val price: BigDecimal,
     val room: String?,
     val date: LocalDate,
-    val time: LocalTime,
-    val createdAt: LocalDateTime
+    val time: LocalTime
 )
 
 data class MovieSessionRequest(
-    val price: BigDecimal?,
-    val sessionDateTime: LocalDateTime?,
+    val price: BigDecimal? = null,
+    val sessionDateTime: LocalDateTime? = null,
     val room: String? = null
 )

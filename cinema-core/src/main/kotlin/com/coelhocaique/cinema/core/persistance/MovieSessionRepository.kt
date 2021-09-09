@@ -9,6 +9,6 @@ interface MovieSessionRepository : ReactiveMongoRepository<MovieSessionDocument,
 
     fun findByMovieIdAndIdAndActive(movieId: UUID, id: UUID, active: Boolean): Mono<MovieSessionDocument>
 
-    fun findByMovieAndActive(movieId: UUID, active: Boolean): Flux<MovieSessionDocument>
+    fun findByMovieIdAndActive(movieId: UUID, active: Boolean): Flux<MovieSessionDocument>
 
 }

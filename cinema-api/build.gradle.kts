@@ -1,4 +1,3 @@
-//import org.springframework.boot.gradle.tasks.run.BootRun
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 object DependencyVersions {
@@ -13,13 +12,13 @@ plugins {
 apply(plugin = "org.springframework.boot")
 apply(plugin = "application")
 
-//tasks.getByName<BootRun>("bootRun") {
-//    main = "com.coelhocaique.cinema.api.ApiStarterKt"
+//tasks.getByName<org.springframework.boot.gradle.tasks.run.BootRun>("bootRun") {
+//    mainClass.set("com.coelhocaique.cinema.api.ApiStarterKt")
 //    systemProperties(System.getProperties().mapKeys { it.key as String })
 //}
 
 application{
-    mainClassName = "com.coelhocaique.cinema.api.ApiStarterKt"
+    mainClass.set("com.coelhocaique.cinema.api.ApiStarterKt")
 }
 
 tasks.getByName<Zip>("distZip").enabled = false
@@ -32,6 +31,8 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.9.9")
     testImplementation("org.springframework.boot:spring-boot-starter-test:${DependencyVersions.SPRING_VERSION}")
     implementation(kotlin("stdlib-jdk8"))
+    testImplementation("io.rest-assured:rest-assured:4.4.0")
+
 }
 repositories {
     mavenCentral()

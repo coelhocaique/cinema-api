@@ -14,7 +14,7 @@ class MovieSessionService(
     private val movieService: MovieService
 ) {
     fun findByMovieId(movieId: UUID): Mono<List<MovieSessionResponse>> {
-        return movieSessionRepository.findByMovieAndActive(movieId, true)
+        return movieSessionRepository.findByMovieIdAndActive(movieId, true)
                     .flatMap { toMovieSessionResponse(it) }
                     .collectList()
     }

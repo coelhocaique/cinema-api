@@ -16,8 +16,7 @@ object MovieSessionMapper {
             price = document.price,
             room = document.room,
             time = document.time,
-            date = document.date,
-            createdAt = LocalDateTime.now()
+            date = document.date
         )
     )
 

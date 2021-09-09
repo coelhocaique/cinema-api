@@ -1,7 +1,7 @@
 package com.coelhocaique.cinema.api.handler
 
 import com.coelhocaique.cinema.api.handler.RequestParameterHandler.extractBody
-import com.coelhocaique.cinema.api.handler.RequestParameterHandler.retrieveId
+import com.coelhocaique.cinema.api.handler.RequestParameterHandler.retrieveMovieId
 import com.coelhocaique.cinema.api.helper.RequestValidator.validate
 import com.coelhocaique.cinema.api.helper.ResponseHandler.generateResponse
 import com.coelhocaique.cinema.core.service.review.ReviewRequest
@@ -17,14 +17,14 @@ import reactor.core.publisher.Mono
 class ReviewHandler(private val reviewService: ReviewService) {
 
     fun findMovieReviews(req: ServerRequest): Mono<ServerResponse> {
-        return retrieveId(req)
+        return retrieveMovieId(req)
             .flatMap { reviewService.find(it, ReviewType.MOVIE) }
-            .let { generateResponse(it) }
+            .let { generateResponse(it, onEmptyStatus = HttpStatus.OK.value()) }
     }
 
     fun createMovieReview(req: ServerRequest): Mono<ServerResponse> {
         return extractBody<ReviewRequest>(req)
-            .flatMap { validate(it).zipWith(retrieveId(req)) }
+            .flatMap { validate(it).zipWith(retrieveMovieId(req)) }
             .flatMap { reviewService.createMovieReview(it.t2, it.t1) }
             .let { generateResponse(it, successStatus = HttpStatus.CREATED.value()) }
     }

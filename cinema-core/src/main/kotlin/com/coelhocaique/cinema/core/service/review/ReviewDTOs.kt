@@ -12,6 +12,6 @@ data class ReviewResponse(
 )
 
 data class ReviewRequest(
-    val rating: Double,
+    val rating: Double? = null,
     val comment: String? = null
 )

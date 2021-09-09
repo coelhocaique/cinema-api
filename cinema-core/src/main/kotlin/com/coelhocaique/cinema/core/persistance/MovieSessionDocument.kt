@@ -8,7 +8,7 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 import java.util.UUID
 
-@Document
+@Document("movieSession")
 data class MovieSessionDocument(
     @Id val id: UUID,
     val movieId: UUID,

@@ -19,7 +19,7 @@ class MovieSessionHandler(private val movieSessionService: MovieSessionService) 
     fun findByMovieId(req: ServerRequest): Mono<ServerResponse> {
         return retrieveMovieId(req)
             .flatMap { movieSessionService.findByMovieId(it) }
-            .let { generateResponse(it) }
+            .let { generateResponse(it, onEmptyStatus = HttpStatus.OK.value()) }
     }
 
     fun create(req: ServerRequest): Mono<ServerResponse> {

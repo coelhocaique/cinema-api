@@ -17,7 +17,7 @@ object RequestValidator {
     fun validate(request: ReviewRequest): Mono<ReviewRequest> {
         return try {
             nonNull(request.rating, RATING)
-            ratingRange(request.rating)
+            checkRatingRange(request.rating!!)
             just(request)
         } catch (e: IllegalArgumentException){
             error(business(e.message!!))
@@ -34,7 +34,7 @@ object RequestValidator {
         }
     }
 
-    private fun ratingRange(rating: Double) {
+    private fun checkRatingRange(rating: Double) {
         if (rating < 1 || rating > 5) {
             throw IllegalArgumentException(INVALID_RATING_RANGE)
         }

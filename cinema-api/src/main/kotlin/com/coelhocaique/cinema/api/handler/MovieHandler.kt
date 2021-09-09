@@ -19,6 +19,6 @@ class MovieHandler(private val movieService: MovieService) {
     }
 
     fun findAll(req: ServerRequest): Mono<ServerResponse> {
-        return generateResponse(movieService.findAll(), onEmptyStatus = HttpStatus.NO_CONTENT.value())
+        return generateResponse(movieService.findAll(), onEmptyStatus = HttpStatus.OK.value())
     }
 }

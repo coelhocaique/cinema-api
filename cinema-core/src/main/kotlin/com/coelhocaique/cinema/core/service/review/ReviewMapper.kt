@@ -29,7 +29,7 @@ object ReviewMapper {
             referenceId = referenceId,
             type = type,
             comment = request.comment,
-            rating = request.rating,
+            rating = request.rating!!,
             createdAt = LocalDateTime.now()
         )
     )
