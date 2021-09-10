@@ -19,8 +19,8 @@ subprojects{
 
     group = "com.coelhocaique"
     version = "0.0.1-SNAPSHOT"
-    java.sourceCompatibility = JavaVersion.VERSION_11
-    java.targetCompatibility = JavaVersion.VERSION_11
+    java.sourceCompatibility = JavaVersion.VERSION_16
+    java.targetCompatibility = JavaVersion.VERSION_16
 
     val developmentOnly by configurations.creating
     configurations {
@@ -52,13 +52,13 @@ subprojects{
         testImplementation("io.projectreactor:reactor-test:3.2.11.RELEASE")
     }
 
-    java.sourceCompatibility = JavaVersion.VERSION_11
-    java.targetCompatibility = JavaVersion.VERSION_11
+    java.sourceCompatibility = JavaVersion.VERSION_14
+    java.targetCompatibility = JavaVersion.VERSION_14
 
     tasks.withType<KotlinCompile> {
         kotlinOptions {
             freeCompilerArgs = listOf("-Xjsr305=strict")
-            jvmTarget = "11"
+            jvmTarget = "16"
         }
     }
 

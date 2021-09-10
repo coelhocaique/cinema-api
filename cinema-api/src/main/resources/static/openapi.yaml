@@ -1,33 +1,7 @@
 openapi: 3.0.1
 info:
-  title: Personal Finance API
+  title: Cinema API
   description: >
-    # Introduction
-
-    Control your personal money with Personal Finance API, it is a simple, cool and secure way to store the personal information about your money. This REST API allows you to create, access and manage your data and it do not store any personal sensitive information such as name, email and etc. All you need is an authorization code which will be covered in the next section.
-    
-    # Authentication
-
-    All requests to the API need an Authorization code which will be sent as a header. This authorization code needs to be an UUID which will be the token to access your data. 
-    
-    # Key Concepts
-    
-    The API was architected with a strong concept of reference date, that means it groups your input by year and month (YYYYMM). So, let's say that every first day of the month begins a new cycle.<br>
-    
-    So every end of the month you will know how much you've spent and how much you've made
-    
-    ## Operations
-    
-    * Debt - a debt, something you've spent. 
-    
-    * Recurring Debt - a debt that shoud be renewed every month. Like netflix, spotify, gym...
-    
-    * Income - an income, any money you make like salary, a gift cash...
-    
-    * Parameter - it can be used to store properties that can be customizable by month. Like debt threshold or a target income amount.
-    
-    * Custom Parameter - it can be used to store properties that do not change every month. Just like debt tags, debt types or income sources.
-  
     # Author
     
     <strong>Caique Dos Santos Coelho, Computer Scientist.<br/>
@@ -42,13 +16,12 @@ info:
     [Github repository](https://github.com/coelhocaique/personal-finance-api)<br/>
     [Docker hub repository](https://hub.docker.com/repository/docker/coelhocaique/personal-finance-api)
     <br/><br/>
-    
-    Feel free to contribute.
+
     </strong>
     
   version: 1.0.0
 servers:
-  - url: 'http://localhost:8081/v1'
+  - url: 'http://localhost:8888'
 tags:
   - name: debt
     description: Control everything you spend
@@ -61,7 +34,7 @@ tags:
   - name: custom-attribute
     description: Use custom attributes to create static data
 paths:
-  /debt:
+  /movies:
     post:
       tags:
         - debt
@@ -1315,9 +1288,3 @@ components:
           type: string
         href:
           type: string
-    
-  securitySchemes:
-    auth_account_id:
-      type: apiKey
-      in: header
-      name: Authorization

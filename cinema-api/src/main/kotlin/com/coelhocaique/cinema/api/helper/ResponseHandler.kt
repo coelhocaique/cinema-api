@@ -9,7 +9,7 @@ import reactor.core.publisher.Mono
 
 object ResponseHandler {
 
-    data class ErrorResponse(val errors: List<String>)
+    data class ErrorResponse(val error: String)
 
     fun <T> generateResponse(body: Mono<T>, successStatus: Int = 200, onEmptyStatus: Int = 404): Mono<ServerResponse> {
         return body.onErrorMap { it }
@@ -31,13 +31,11 @@ object ResponseHandler {
     }
 
     private fun mapApiException(it: ApiException): Mono<ServerResponse> {
-        logger().error("error=".plus(it.type.toString())
-            .plus(", cause=")
-            .plus(it.messages.joinToString { it }), it
-        )
+        logger().error("error=$it.type.to, cause=$it.errorMessage", it)
+
         return ServerResponse
             .status(it.type.status)
-            .bodyValue(buildErrorResponse(it.message))
+            .bodyValue(buildErrorResponse(it.errorMessage))
     }
 
     private fun <T> success(it: T, status: Int): Mono<ServerResponse> {
@@ -46,5 +44,5 @@ object ResponseHandler {
             .body(BodyInserters.fromValue(it!!))
     }
 
-    private fun buildErrorResponse(message: String?) = ErrorResponse(listOf(message ?: DEFAULT_ERROR_MESSAGE))
+    private fun buildErrorResponse(message: String?) = ErrorResponse(message ?: DEFAULT_ERROR_MESSAGE)
 }

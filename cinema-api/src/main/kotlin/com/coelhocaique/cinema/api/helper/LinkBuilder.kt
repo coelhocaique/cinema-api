@@ -14,27 +14,27 @@ import reactor.core.publisher.Mono.just
 object LinkBuilder {
 
     fun addMovieSessionResponseLinks(req: ServerRequest, response: List<MovieSessionResponse>): Mono<List<MovieSessionResponse>> {
-        return just(response.map { addMovieSessionResponseLinks(req.uri().toString(), it) })
+        return just(response.map { addMovieSessionResponseLinks(extractBaseUri(req), it) })
     }
 
     fun addMovieSessionResponseLinks(req: ServerRequest, response: MovieSessionResponse): Mono<MovieSessionResponse> {
-        return just(addMovieSessionResponseLinks(req.uri().toString(), response))
+        return just(addMovieSessionResponseLinks(extractBaseUri(req), response))
     }
 
     fun addReviewResponseLinks(req: ServerRequest, response: List<ReviewResponse>): Mono<List<ReviewResponse>> {
-        return just(response.map { addReviewResponseLinks(req.uri().toString(), it) })
+        return just(response.map { addReviewResponseLinks(extractBaseUri(req), it) })
     }
 
     fun addReviewResponseLinks(req: ServerRequest, response: ReviewResponse): Mono<ReviewResponse> {
-        return just(addReviewResponseLinks(req.uri().toString(), response))
+        return just(addReviewResponseLinks(extractBaseUri(req), response))
     }
 
     fun addMovieResponseLinks(req: ServerRequest, response: List<MovieResponse>): Mono<List<MovieResponse>> {
-        return just(response.map { addMovieResponseLinks(req.uri().toString(), it) })
+        return just(response.map { addMovieResponseLinks(extractBaseUri(req), it) })
     }
 
     fun addMovieResponseLinks(req: ServerRequest, response: MovieResponse): Mono<MovieResponse> {
-        return just(addMovieResponseLinks(req.uri().toString(), response))
+        return just(addMovieResponseLinks(extractBaseUri(req), response))
     }
 
     private fun addMovieSessionResponseLinks(uri: String, response: MovieSessionResponse): MovieSessionResponse {
@@ -69,6 +69,11 @@ object LinkBuilder {
 
         return response.copy(links = links)
     }
-
+    
+    private fun extractBaseUri(req: ServerRequest): String {
+        val uri = req.uri()
+        return uri.toString().replace(uri.path, "/")
+    }
+    
     private fun mapLink(method: HttpMethod, href: String) = mapOf("method" to method.name, "href" to href)
 }

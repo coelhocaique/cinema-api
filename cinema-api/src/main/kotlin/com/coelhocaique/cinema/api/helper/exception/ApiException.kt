@@ -2,7 +2,7 @@ package com.coelhocaique.cinema.api.helper.exception
 
 data class ApiException(
         val type: ExceptionType,
-        val messages: List<String> = listOf(),
+        val errorMessage: String? = null,
         val ex: Throwable? = null
 ) : RuntimeException(ex) {
 
@@ -11,8 +11,8 @@ data class ApiException(
     }
 
     companion object ApiExceptionHelper {
-        fun business(message: String) = ApiException(ExceptionType.BUSINESS_EXCEPTION, listOf(message))
+        fun business(message: String?) = ApiException(ExceptionType.BUSINESS_EXCEPTION, message)
 
-        fun business(message: String, e: Throwable) = ApiException(ExceptionType.BUSINESS_EXCEPTION, listOf(message), e)
+        fun business(message: String?, e: Throwable) = ApiException(ExceptionType.BUSINESS_EXCEPTION, message, e)
     }
 }

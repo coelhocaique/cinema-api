@@ -19,7 +19,7 @@ object RequestValidator {
             nonNull(request.rating, RATING)
             checkRatingRange(request.rating!!)
             just(request)
-        } catch (e: IllegalArgumentException){
+        } catch (e: Exception){
             error(business(e.message!!))
         }
     }
@@ -29,7 +29,7 @@ object RequestValidator {
             nonNull(request.price, PRICE)
             nonNull(request.sessionDateTime, SESSION_DATETIME)
             just(request)
-        } catch (e: IllegalArgumentException){
+        } catch (e: Exception){
             error(business(e.message!!))
         }
     }

@@ -32,16 +32,17 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test:${DependencyVersions.SPRING_VERSION}")
     implementation(kotlin("stdlib-jdk8"))
     testImplementation("io.rest-assured:rest-assured:4.4.0")
-
+    implementation("org.springdoc:springdoc-openapi-webflux-ui:1.5.10")
 }
+
 repositories {
     mavenCentral()
 }
 val compileKotlin: KotlinCompile by tasks
 compileKotlin.kotlinOptions {
-    jvmTarget = "11"
+    jvmTarget = "16"
 }
 val compileTestKotlin: KotlinCompile by tasks
 compileTestKotlin.kotlinOptions {
-    jvmTarget = "11"
+    jvmTarget = "16"
 }

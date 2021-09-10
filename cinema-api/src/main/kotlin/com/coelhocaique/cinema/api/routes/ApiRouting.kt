@@ -14,6 +14,7 @@ class ApiRouting {
     fun movieRoutes(handler: MovieHandler) = router {
         GET("/movies", handler::findAll)
         GET("/movies/{id}", handler::findById)
+        POST("/movies", handler::create)
     }
 
     @Bean

@@ -12,3 +12,7 @@ data class MovieResponse(
     val ratings: List<OmdbRatingsResponse>?,
     val links: List<Map<String, String>>? = null
 )
+
+data class MovieRequest(
+    val imdbId: String?
+)

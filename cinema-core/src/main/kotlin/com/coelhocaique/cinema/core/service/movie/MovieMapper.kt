@@ -3,6 +3,8 @@ package com.coelhocaique.cinema.core.service.movie
 import com.coelhocaique.cinema.core.service.movie.client.OmdbResponse
 import com.coelhocaique.cinema.core.persistance.MovieDocument
 import reactor.core.publisher.Mono.just
+import java.time.LocalDateTime
+import java.util.UUID
 
 object MovieMapper {
 
@@ -17,6 +19,16 @@ object MovieMapper {
             released = omdbResponse.released,
             runtime = omdbResponse.runtime,
             ratings = omdbResponse.ratings
+        )
+    )
+
+    fun toMovieDocument(
+        omdbResponse: OmdbResponse
+    ) = just(
+        MovieDocument(
+            id = UUID.randomUUID(),
+            imdbId = omdbResponse.imdbId,
+            createdAt = LocalDateTime.now()
         )
     )
 }
