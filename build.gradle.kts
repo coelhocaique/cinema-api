@@ -52,9 +52,6 @@ subprojects{
         testImplementation("io.projectreactor:reactor-test:3.2.11.RELEASE")
     }
 
-    java.sourceCompatibility = JavaVersion.VERSION_14
-    java.targetCompatibility = JavaVersion.VERSION_14
-
     tasks.withType<KotlinCompile> {
         kotlinOptions {
             freeCompilerArgs = listOf("-Xjsr305=strict")
@@ -84,10 +81,10 @@ subprojects{
         dependsOn(tasks.test)
 
         reports {
-            xml.isEnabled = true
-            csv.isEnabled = false
-            html.isEnabled = true
-            html.destination = file("${buildDir}/jacocoTestReport")
+            xml.required.set(true)
+            csv.required.set(true)
+            html.required.set(true)
+            html.outputLocation.set(file("${buildDir}/jacocoTestReport"))
         }
     }
 

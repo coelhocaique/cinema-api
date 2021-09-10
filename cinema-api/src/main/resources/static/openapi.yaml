@@ -3,14 +3,14 @@ info:
   title: Cinema API
   description: >
     # Author
-    
+
     <strong>Caique Dos Santos Coelho, Computer Scientist.<br/>
     [Linkedin profile](https://www.linkedin.com/in/coelhocaiquesantos96) <br/>
     [Github profile](https://github.com/coelhocaique)
     </strong>
-    
+
     # Project
-    
+
     <strong>
     [Documentation](https://github.com/coelhocaique/personal-finance-api/wiki)<br/>
     [Github repository](https://github.com/coelhocaique/personal-finance-api)<br/>
@@ -18,34 +18,30 @@ info:
     <br/><br/>
 
     </strong>
-    
+
   version: 1.0.0
 servers:
   - url: 'http://localhost:8888'
 tags:
-  - name: debt
-    description: Control everything you spend
-  - name: recurring-debt
-    description: Add debts that shoud be renewed every month
-  - name: income
-    description: Control all the money you make
-  - name: parameter
-    description: You can also use custom parameters with reference date
-  - name: custom-attribute
-    description: Use custom attributes to create static data
+  - name: movies
+    description: All information about the available movies
+  - name: movie-sessions
+    description: All information about movie sessions and times
+  - name: movie-reviews
+    description: All reviews about your preferred movie
 paths:
   /movies:
     post:
       tags:
-        - debt
-      summary: Add a new debt or something you've spent
-      operationId: create-debt
+        - movies
+      summary: Create a new movie
+      operationId: create-movie
       requestBody:
         description: Data needed to create a new debt
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/DebtRequest'
+              $ref: '#/components/schemas/MovieRequest'
         required: true
       responses:
         '201':
@@ -53,60 +49,24 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/DebtResponse'
+                $ref: '#/components/schemas/MovieResponse'
         '400':
           description: Invalid request
           content:
             application/json:
               schema:
-                  $ref: '#/components/schemas/Error'
-        '401':
-          description: Unauthorized
-          content: 
-            application/json:
-              schema:
-                  $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/Error'
         '500':
           description: Server error
           content:
             application/json:
               schema:
-                  $ref: '#/components/schemas/Error'
-      security:
-        - auth_account_id: []
+                $ref: '#/components/schemas/Error'
     get:
       tags:
-        - debt
-      summary: Finds debts
-      description: At least one filter should be informed. Reference date(reference_date), date range (date_from and date_to) which should be in an YYYYMM (year and month) format. For example 202001 (January of 2020) or the debt reference code (UUID).
-      operationId: find-debts
-      parameters:
-        - name: date_from
-          in: query
-          description: reference date from
-          schema:
-            type: string
-            format: YYYYMM
-        - name: date_to
-          in: query
-          description: reference date to
-          schema:
-            type: string
-            format: YYYYMM
-        - name: reference_date
-          in: query
-          description: reference date
-          schema:
-            type: string
-            format: YYYYMM
-        - name: reference_code
-          in: query
-          description: debt reference code
-          schema:
-            type: string
-            format: uuid
+        - movies
+      summary: Find all available movies
+      operationId: find-all-movies
       responses:
         '200':
           description: successful operation
@@ -115,75 +75,30 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/DebtResponse'
+                  $ref: '#/components/schemas/MovieResponse'
         '400':
           description: Invalid request
           content:
             application/json:
               schema:
-                  $ref: '#/components/schemas/Error'
-        '401':
-          description: Unauthorized
-          content: 
-            application/json:
-              schema:
-                  $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/Error'
         '500':
           description: Server error
           content:
             application/json:
               schema:
-                  $ref: '#/components/schemas/Error'
-      security:
-        - auth_account_id: []
-    delete:
-      tags:
-        - debt
-      summary: Deletes by reference code
-      description: Delete by reference code, that means all installments will be deleted
-      operationId: delete-by-reference-code
-      parameters:
-        - name: reference_code
-          in: query
-          required: true
-          description: reference date
-          schema:
-            type: string
-            format: uuid
-      responses:
-        '204':
-          description: successful operation
-        '400':
-          description: Invalid request
-          content:
-            application/json:
-              schema:
-                  $ref: '#/components/schemas/Error'
-        '401':
-          description: Unauthorized
-          content: 
-            application/json:
-              schema:
-                  $ref: '#/components/schemas/Error'
-        '500':
-          description: Server error
-          content:
-            application/json:
-              schema:
-                  $ref: '#/components/schemas/Error'
-      security:
-        - auth_account_id: []
-  /debt/{id}:
+                $ref: '#/components/schemas/Error'
+  '/movies/{id}':
     get:
       tags:
-        - debt
-      summary: Finds a debt by id
+        - movies
+      summary: Find a single movie
       description: Returns a single debt
-      operationId: find-debt-by-id
+      operationId: find-movie-by-id
       parameters:
         - name: id
           in: path
-          description: ID of debt to return
+          description: movie Id
           required: true
           schema:
             type: string
@@ -194,76 +109,39 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DebtRequest'
+                $ref: '#/components/schemas/MovieResponse'
         '400':
           description: Invalid request
           content:
             application/json:
               schema:
-                  $ref: '#/components/schemas/Error'
-        '401':
-          description: Unauthorized
-          content: 
-            application/json:
-              schema:
-                  $ref: '#/components/schemas/Error'
-        '500':
-          description: Server error
-          content:
-            application/json:
-              schema:
-                  $ref: '#/components/schemas/Error'
-      security:
-        - auth_account_id: []
-    delete:
-      tags:
-        - debt
-      summary: Deletes a single debt
-      operationId: delete-debt
-      parameters:
-        - name: id
-          in: path
-          description: ID of debt to delete
-          required: true
-          schema:
-            type: string
-            format: uuid
-      responses:
-        '204':
-          description: successful operation
-        '400':
-          description: Invalid request
-          content:
-            application/json:
-              schema:
-                  $ref: '#/components/schemas/Error'
-        '401':
-          description: Unauthorized
-          content: 
-            application/json:
-              schema:
-                  $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/Error'
         '500':
           description: Server error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-      security:
-        - auth_account_id: []
-  
-  /recurring-debt:
+  '/movies/{movieId}/sessions':
     post:
       tags:
-        - recurring-debt
-      summary: Add a debt that should be renewed every month
-      operationId: create-recurring-debt
+        - movie-sessions
+      summary: Create a new movie session time
+      operationId: create-movie-session
+      parameters:
+        - name: movieId
+          in: path
+          description: movie Id
+          required: true
+          schema:
+            type: string
+            format: uuid
       requestBody:
-        description: Data needed to create a new recurring debt
+        description: Data needed to create movie session
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RecurringDebtRequest'
+              $ref: '#/components/schemas/MovieSessionRequest'
         required: true
       responses:
         '201':
@@ -273,73 +151,29 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/RecurringDebtResponse'
+                  $ref: '#/components/schemas/MovieSessionResponse'
         '400':
           description: Invalid request
           content:
             application/json:
               schema:
-                  $ref: '#/components/schemas/Error'
-        '401':
-          description: Unauthorized
-          content: 
-            application/json:
-              schema:
-                  $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/Error'
         '500':
           description: Server error
           content:
             application/json:
               schema:
-                  $ref: '#/components/schemas/Error'
-      security:
-        - auth_account_id: []
+                $ref: '#/components/schemas/Error'
     get:
       tags:
-        - recurring-debt
-      summary: Finds recurring debts
-      description: At least one filter should be informed. Reference date(reference_date) or date range (date_from and date_to). All of them should be in an YYYYMM (year and month). For example 202001 (January of 2020)
-      operationId: find-recurring-debts
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/RecurringDebtResponse'
-        '400':
-          description: Invalid request
-          content:
-            application/json:
-              schema:
-                  $ref: '#/components/schemas/Error'
-        '401':
-          description: Unauthorized
-          content: 
-            application/json:
-              schema:
-                  $ref: '#/components/schemas/Error'
-        '500':
-          description: Server error
-          content:
-            application/json:
-              schema:
-                  $ref: '#/components/schemas/Error'
-      security:
-        - auth_account_id: []
-  /recurring-debt/{id}:
-    get:
-      tags:
-        - recurring-debt
-      summary: Finds a recurring debt by id
-      description: Returns a single recurring debt
-      operationId: find-recurring-debt-by-id
+        - movie-sessions
+      summary: Find movie sessions
+      description: Find all available movie sessions for the specified movie
+      operationId: find-movie-session
       parameters:
-        - name: id
+        - name: movieId
           in: path
-          description: ID of recurring debt to return
+          description: movie Id
           required: true
           schema:
             type: string
@@ -350,36 +184,38 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RecurringDebtResponse'
+                type: array
+                items:
+                  $ref: '#/components/schemas/MovieSessionResponse'
         '400':
           description: Invalid request
           content:
             application/json:
               schema:
-                  $ref: '#/components/schemas/Error'
-        '401':
-          description: Unauthorized
-          content: 
-            application/json:
-              schema:
-                  $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/Error'
         '500':
           description: Server error
           content:
             application/json:
               schema:
-                  $ref: '#/components/schemas/Error'
-      security:
-        - auth_account_id: []
+                $ref: '#/components/schemas/Error'
+  '/movies/{movieId}/sessions/{id}':
     delete:
       tags:
-        - recurring-debt
-      summary: Deletes a recurring debt
-      operationId: delete-recurring-debt
+        - movie-sessions
+      summary: Deletes a movie session
+      operationId: delete-movie-session
       parameters:
+        - name: movieId
+          in: path
+          description: movie Id
+          required: true
+          schema:
+            type: string
+            format: uuid
         - name: id
           in: path
-          description: ID of recurring debt to delete
+          description: movie session Id
           required: true
           schema:
             type: string
@@ -392,210 +228,34 @@ paths:
           content:
             application/json:
               schema:
-                  $ref: '#/components/schemas/Error'
-        '401':
-          description: Unauthorized
-          content: 
-            application/json:
-              schema:
-                  $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/Error'
         '500':
           description: Server error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-      security:
-        - auth_account_id: []
-  /income:
-    post:
-      tags:
-        - income
-      summary: Create a new income 
-      operationId: create-income
-      requestBody:
-        description: Data needed to create a new income
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/IncomeRequest'
-        required: true
-      responses:
-        '201':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/IncomeResponse'
-        '400':
-          description: Invalid request
-          content:
-            application/json:
-              schema:
-                  $ref: '#/components/schemas/Error'
-        '401':
-          description: Unauthorized
-          content: 
-            application/json:
-              schema:
-                  $ref: '#/components/schemas/Error'
-        '500':
-          description: Server error
-          content:
-            application/json:
-              schema:
-                  $ref: '#/components/schemas/Error'
-      security:
-        - auth_account_id: []
-    get:
-      tags:
-        - income
-      summary: Finds incomes
-      description: At least one filter should be informed. Reference date(reference_date) or date range (date_from and date_to). All of them should be in an YYYYMM (year and month). For example 202001 (January of 2020)
-      operationId: find-incomes
-      parameters:
-        - name: date_from
-          in: query
-          description: reference date from
-          schema:
-            type: string
-            format: YYYYMM
-        - name: date_to
-          in: query
-          description: reference date to
-          schema:
-            type: string
-            format: YYYYMM
-        - name: reference_date
-          in: query
-          description: reference date
-          schema:
-            type: string
-            format: YYYYMM
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/IncomeResponse'
-        '400':
-          description: Invalid request
-          content:
-            application/json:
-              schema:
-                  $ref: '#/components/schemas/Error'
-        '401':
-          description: Unauthorized
-          content: 
-            application/json:
-              schema:
-                  $ref: '#/components/schemas/Error'
-        '500':
-          description: Server error
-          content:
-            application/json:
-              schema:
-                  $ref: '#/components/schemas/Error'
-      security:
-        - auth_account_id: []
-  /income/{id}:
-    get:
-      tags:
-        - income
-      summary: Finds an income by id
-      description: Returns a single income
-      operationId: find-income-by-id
-      parameters:
-        - name: id
-          in: path
-          description: ID of income to return
-          required: true
-          schema:
-            type: string
-            format: uuid
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/IncomeResponse'
-        '400':
-          description: Invalid request
-          content:
-            application/json:
-              schema:
-                  $ref: '#/components/schemas/Error'
-        '401':
-          description: Unauthorized
-          content: 
-            application/json:
-              schema:
-                  $ref: '#/components/schemas/Error'
-        '500':
-          description: Server error
-          content:
-            application/json:
-              schema:
-                  $ref: '#/components/schemas/Error'
-      security:
-        - auth_account_id: []
-    delete:
-      tags:
-        - income
-      summary: Deletes an income
-      operationId: delete-income
-      description: Deletes a single income
-      parameters:
-        - name: id
-          in: path
-          description: ID of income to delete
-          required: true
-          schema:
-            type: string
-            format: uuid
-      responses:
-        '204':
-          description: successful operation
-        '400':
-          description: Invalid request
-          content:
-            application/json:
-              schema:
-                  $ref: '#/components/schemas/Error'
-        '401':
-          description: Unauthorized
-          content: 
-            application/json:
-              schema:
-                  $ref: '#/components/schemas/Error'
-        '500':
-          description: Server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-      security:
-        - auth_account_id: []
 
-  /parameter:
+  '/movies/{movieId}/reviews':
     post:
       tags:
-        - parameter
-      summary: Creates a new parameter 
-      operationId: create-parameter
-      description: Parameters can be useful to control debt thresholds by month for example, where you can add a custom value you are allowed to spend every month. 
+        - movie-reviews
+      summary: create a new movie review
+      operationId: create-movie-review
+      parameters:
+        - name: movieId
+          in: path
+          description: movie Id
+          required: true
+          schema:
+            type: string
+            format: uuid
       requestBody:
-        description: Data needed to create a new parameter
+        description: Data needed to create movie review
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ParameterRequest'
+              $ref: '#/components/schemas/ReviewRequest'
         required: true
       responses:
         '201':
@@ -605,217 +265,33 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/ParameterResponse'
+                  $ref: '#/components/schemas/ReviewResponse'
         '400':
           description: Invalid request
           content:
             application/json:
               schema:
-                  $ref: '#/components/schemas/Error'
-        '401':
-          description: Unauthorized
-          content: 
-            application/json:
-              schema:
-                  $ref: '#/components/schemas/Error'
-        '500':
-          description: Server error
-          content:
-            application/json:
-              schema:
-                  $ref: '#/components/schemas/Error'
-      security:
-        - auth_account_id: []
-    get:
-      tags:
-        - parameter
-      summary: Finds parameters
-      description: At least one filter should be informed. Reference date(reference_date) or date range (date_from and date_to). All of them should be in an YYYYMM (year and month). For example 202001 (January of 2020)
-      operationId: find-parameters
-      parameters:
-        - name: date_from
-          in: query
-          description: reference date from
-          schema:
-            type: string
-            format: YYYYMM
-        - name: date_to
-          in: query
-          description: reference date to
-          schema:
-            type: string
-            format: YYYYMM
-        - name: reference_date
-          in: query
-          description: reference date
-          schema:
-            type: string
-            format: YYYYMM
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/ParameterResponse'
-        '400':
-          description: Invalid request
-          content:
-            application/json:
-              schema:
-                  $ref: '#/components/schemas/Error'
-        '401':
-          description: Unauthorized
-          content: 
-            application/json:
-              schema:
-                  $ref: '#/components/schemas/Error'
-        '500':
-          description: Server error
-          content:
-            application/json:
-              schema:
-                  $ref: '#/components/schemas/Error'
-      security:
-        - auth_account_id: []
-  /parameter/{id}:
-    get:
-      tags:
-        - parameter
-      summary: Finds a parameter by id
-      description: Returns a single parameter
-      operationId: find-parameter-by-id
-      parameters:
-        - name: id
-          in: path
-          description: ID of parameter to fetch
-          required: true
-          schema:
-            type: string
-            format: uuid
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ParameterResponse'
-        '400':
-          description: Invalid request
-          content:
-            application/json:
-              schema:
-                  $ref: '#/components/schemas/Error'
-        '401':
-          description: Unauthorized
-          content: 
-            application/json:
-              schema:
-                  $ref: '#/components/schemas/Error'
-        '500':
-          description: Server error
-          content:
-            application/json:
-              schema:
-                  $ref: '#/components/schemas/Error'
-      security:
-        - auth_account_id: []
-    delete:
-      tags:
-        - parameter
-      summary: Deletes a parameter
-      operationId: delete-parameter
-      description: Deletes a single parameter
-      parameters:
-        - name: id
-          in: path
-          description: ID of parameter to delete
-          required: true
-          schema:
-            type: string
-            format: uuid
-      responses:
-        '204':
-          description: successful operation
-        '400':
-          description: Invalid request
-          content:
-            application/json:
-              schema:
-                  $ref: '#/components/schemas/Error'
-        '401':
-          description: Unauthorized
-          content: 
-            application/json:
-              schema:
-                  $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/Error'
         '500':
           description: Server error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-      security:
-        - auth_account_id: []
-        
-  /custom-attribute:
-    post:
-      tags:
-        - custom-attribute
-      summary: Creates a new custom attribute 
-      operationId: create-custom-attribute
-      description: Custom attributes are very similar to Parameters but it is not controlled by reference date, so it is advised to be used for static contents, such as debt tags, debt types or income sources.  
-      requestBody:
-        description: Data needed to create a new custom attribute
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CustomAttributeRequest'
-        required: true
-      responses:
-        '201':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/CustomAttributeResponse'
-        '400':
-          description: Invalid request
-          content:
-            application/json:
-              schema:
-                  $ref: '#/components/schemas/Error'
-        '401':
-          description: Unauthorized
-          content: 
-            application/json:
-              schema:
-                  $ref: '#/components/schemas/Error'
-        '500':
-          description: Server error
-          content:
-            application/json:
-              schema:
-                  $ref: '#/components/schemas/Error'
-      security:
-        - auth_account_id: []
     get:
       tags:
-        - custom-attribute
-      summary: Finds custom attributes
-      description: Searches can be performed by property name or no parameters, where all custom attributes are returned 
-      operationId: find-custom-attributes
+        - movie-reviews
+      summary: Find All movie reviews
+      description: Find all movie reviews for the specified movie
+      operationId: find-movie-reviews
       parameters:
-        - name: property_name
-          in: query
-          description: the custom attribute property name
+        - name: movieId
+          in: path
+          description: movie Id
+          required: true
           schema:
             type: string
-            format: YYYYMM
+            format: uuid
       responses:
         '200':
           description: successful operation
@@ -824,460 +300,188 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/CustomAttributeResponse'
+                  $ref: '#/components/schemas/ReviewResponse'
         '400':
           description: Invalid request
           content:
             application/json:
               schema:
-                  $ref: '#/components/schemas/Error'
-        '401':
-          description: Unauthorized
-          content: 
-            application/json:
-              schema:
-                  $ref: '#/components/schemas/Error'
-        '500':
-          description: Server error
-          content:
-            application/json:
-              schema:
-                  $ref: '#/components/schemas/Error'
-      security:
-        - auth_account_id: []
-  /custom-attribute/{id}:
-    delete:
-      tags:
-        - custom-attribute
-      summary: Deletes a custom attribute
-      operationId: delete-custom-attribute
-      description: Deletes a single custom attribute
-      parameters:
-        - name: id
-          in: path
-          description: ID of custom attribute to delete
-          required: true
-          schema:
-            type: string
-            format: uuid
-      responses:
-        '204':
-          description: successful operation
-        '400':
-          description: Invalid request
-          content:
-            application/json:
-              schema:
-                  $ref: '#/components/schemas/Error'
-        '401':
-          description: Unauthorized
-          content: 
-            application/json:
-              schema:
-                  $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/Error'
         '500':
           description: Server error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-      security:
-        - auth_account_id: []
-
 components:
   schemas:
-    DebtRequest:
+    MovieRequest:
       type: object
       required:
-        - amount
-        - description
-        - debt_date
-        - installments
-        - type
-        - tag
-        - next_month
+        - imdb_id
       properties:
-        amount:
-          type: number
-          description: the debt total amount
+        imdb_id:
+          type: string
+          description: IMDBId of public API Omdbapi
           format: double
-        description:
-          type: string
-          description: a description for this debt
-        debt_date:
-          type: string
-          description: the date this transaction happened
-          format: date
-        installments:
-          type: integer
-          description: is the payment splitted? If so, in how many installments?
-        type:
-          type: string
-          description: was it in cash? credit card? ...
-        tag:
-          type: string
-          description: Add a tag for this debt. Ex. housing, halth, sports...
-        next_month:
-          type: boolean
-          description: whether this debt should be considered just next month or not
-          default: false
-    DebtResponse:
+
+    MovieResponse:
       type: object
       required:
-        - debt_id
-        - amount
-        - description
-        - debt_date
-        - installments
-        - installment_number
-        - type
-        - tag
-        - reference_code
-        - reference_date
-        - total_amount
-        - creation_date
+        - id
+        - title
+        - imdb_rating
+        - released
+        - runtime
+        - ratings
         - links
       properties:
-        debt_id:
+        id:
           type: string
           format: uuid
-          description: the debt UUID
-        amount:
-          type: number
-          description: the current debt amount, the amount splitted if it has more than one installment
-          format: double
-        description:
+          description: the movie id
+        title:
           type: string
-          description: the debt description
-        debt_date:
+          description: movie title
+        imdb_rating:
           type: string
-          description: the debt date description
-          format: date
-        installment_number:
-          type: number
-          description: the installment number of the debt
-        installments:
-          type: integer
-          description: the total number of installments
-        type:
+          description: imdb Rating
+        released:
           type: string
-          description: the debt type
-        tag:
+          description: movie release date
+        runtime:
           type: string
-          description: the debt tag
-        reference_code:
-          type: string
-          format: uuid
-          description: the debt reference code, a unique reference code is generated by debt, even if it is splitted
-        reference_date:
-          type: string 
-          format: YYYYMM
-          description: the debt reference date
-        total_amount:
-          type: number
-          format: float
-          description: the debt total amount
-        creation_date:
-          type: string
-          format: date-time
-          description: the date the debt was created
+          description: movie runtime
+        ratings:
+          type: array
+          description: movie ratings
+          items:
+            $ref: '#/components/schemas/OmdbRatingsResponse'
         links:
           type: array
-          description: links with all operations for the debt
+          description: links with all operations for the movie
           items:
             $ref: '#/components/schemas/Link'
-    RecurringDebtRequest:
+
+    OmdbRatingsResponse:
       type: object
       required:
-        - amount
-        - description
-        - type
-        - tag
-      properties:
-        amount:
-          type: number
-          description: the debt total amount
-          format: double
-        description:
-          type: string
-          description: the debt description
-        type:
-          type: string
-          description: was it in cash? credit card? ...
-        tag:
-          type: string
-          description: Add a tag to this debt. Ex housing, halth, sports...
-    RecurringDebtResponse:
-      type: object
-      required:
-        - recurring_debt_id
-        - amount
-        - description
-        - type
-        - tag
-        - creation_date
-        - links
-      properties:
-        recurring_debt_id:
-          type: string
-          format: uuid
-          description: the recurring debt UUID
-        amount:
-          type: number
-          description: the recurring debt amount
-          format: double
-        description:
-          type: string
-          description: the recurring debt description
-        type:
-          type: string
-          description: recurring debt type
-        tag:
-          type: string
-          description: recurring debt tag
-        creation_date:
-          type: string
-          format: date-time
-          description: the date the recurring debt was created
-        links:
-          type: array
-          description: links with all operations for the recurring debt
-          items:
-            $ref: '#/components/schemas/Link'
-    IncomeRequest:
-      type: object
-      required:
-        - gross_amount
-        - description
-        - receipt_date
-        - reference_date
-        - source_name
-      properties:
-        gross_amount:
-          type: number
-          description: the income gross amount
-          format: double
-        description:
-          type: string
-          description: what did you spend with?
-        receipt_date:
-          type: string
-          description: the date you received the income
-          format: date
-        reference_date:
-          description: the reference date for this income
-          type: string 
-          format: YYYYMM
-        source_name:
-          type: string
-          description: the source of this income. Who paid you?
-        discounts:
-          type: array
-          description: the discounts that should be applied
-          items:
-            $ref: '#/components/schemas/Discount'
-        additions:
-          description: the additions that should be applied
-          type: array
-          items:
-            $ref: '#/components/schemas/Addition'
-    IncomeResponse:
-      type: object
-      required:
-        - income_id
-        - gross_amount
-        - net_amount
-        - additional_amount
-        - discount_amount
-        - description
-        - receipt_date
-        - reference_date
-        - source_name
-        - discounts
-        - additions
-        - creation_date
-        - links
-      properties:
-        income_id:
-          type: string
-          format: uuid
-          description: the income UUID
-        gross_amount:
-          type: number
-          description: the income gross amount
-          format: double
-        net_amount:
-          type: number
-          format: double
-          description: the income net amount
-        additional_amount:
-          type: number
-          format: double
-          description: the amount was added
-        discount_amount:
-          type: number
-          format: double
-          description: the amount was discounted
-        description:
-          type: string
-          description: income description
-        receipt_date:
-          type: string
-          description: the date you received the income
-          format: date
-        reference_date:
-          type: string 
-          format: YYYYMM
-          description: the reference date of the income
-        source_name:
-          type: string
-          description: the income source name
-        creation_date:
-          type: string
-          format: date-time
-          description: the date the income was created
-        discounts:
-          type: array
-          items:
-            $ref: '#/components/schemas/Discount'
-        additions:
-          type: array
-          items:
-            $ref: '#/components/schemas/Addition'
-        links:
-          type: array
-          description: links with all operations for the income
-          items:
-            $ref: '#/components/schemas/Link'
-            
-    ParameterRequest:
-      type: object
-      required:
-        - name
-        - value
-        - reference_date
-      properties:
-        name:
-          type: string
-          description: the name for the new parameter
-        value:
-          type: string
-          description: the value for this parameter
-        reference_date:
-          type: string
-          format: date
-          description: the month it refers to
-          
-    ParameterResponse:
-      type: object
-      required:
-        - parameter_id
-        - name
-        - value
-        - reference_date
-        - creation_date
-        - links
-      properties:
-        parameter_id:
-          type: string
-          format: uuid
-          description: the parameter UUID
-        name:
-          type: string
-          description: the parameter name
-        value:
-          type: string
-          description: the parameter value
-        reference_date:
-          type: string
-          format: YYYYMM
-          description: the reference date the parameter refers to
-        creation_date:
-          type: string
-          format: date-time
-        links:
-          type: array
-          description: links with all operations for the parameter
-          items:
-            $ref: '#/components/schemas/Link'
-            
-    CustomAttributeRequest:
-      type: object
-      required:
-        - property_name
+        - source
         - value
       properties:
-        property_name:
+        source:
           type: string
-          description: the name for the property
+          description: rating source
         value:
           type: string
-          description: the value for this property
-          
-    CustomAttributeResponse:
+          description: rating value
+
+    ReviewRequest:
       type: object
       required:
-        - custom_attribute_id 
-        - property_name
-        - value
-        - creation_date
+        - rating
+      properties:
+        rating:
+          type: number
+          description: rating from 1 to 5 stars
+          format: double
+        comment:
+          type: string
+          description: rating comment
+
+    ReviewResponse:
+      type: object
+      required:
+        - id
+        - movie_id
+        - rating
+        - comment
+        - created_at
         - links
       properties:
-        custom_attribute_id:
+        id:
           type: string
           format: uuid
-          description: the custom attribute UUID
-        property_name:
+          description: the review id
+        movie_id:
           type: string
-          description: the custom atrribute property name
-        value:
+          format: uuid
+          description: the movie id
+        rating:
           type: string
-          description: the custom atrribute property value
-        creation_date:
+          description: rating of the specfied review
+        comment:
           type: string
-          format: date-time
+          description: comment of the specfied review
         links:
           type: array
-          description: links with all operations for the custom attribute
+          description: links with all operations for the review
           items:
             $ref: '#/components/schemas/Link'
-            
-    Discount:
+
+    MovieSessionRequest:
       type: object
       required:
-        - amount
-        - description
+        - price
+        - session_date_time
       properties:
-        amount:
+        price:
           type: number
+          description: session price
           format: double
-          description: the amount of the discount
-        description:
+        session_date_time:
           type: string
-          description: the description of the discount
-    Addition:
+          description: rating comment
+          format: datetime
+        room:
+          type: string
+          description: the session room if exists
+
+    MovieSessionResponse:
       type: object
       required:
-        - amount
-        - description
+        - id
+        - movie_id
+        - price
+        - date
+        - time
+        - links
       properties:
-        amount:
-          format: double
-          type: number
-          description: the amount of the addition
-        description:
+        id:
           type: string
-          description: the description of the addition
-    
+          format: uuid
+          description: the movie session id
+        movie_id:
+          type: string
+          format: uuid
+          description: the movie id
+        price:
+          type: number
+          description: session price
+          format: double
+        date:
+          type: string
+          description: session date (YYYY-MM-DD)
+          format: date
+        time:
+          type: string
+          description: session time (HH-MM-SS)
+          format: date
+        links:
+          type: array
+          description: links with all operations for the movie session
+          items:
+            $ref: '#/components/schemas/Link'
+
     Error:
       type: object
       required:
-        - errors
+        - error
       properties:
-        errors:
-          type: array
-          items:
-            type: string
+        error:
+          type: string
+          description: error message
+
     Link:
       type: object
       required:

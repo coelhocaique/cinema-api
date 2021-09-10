@@ -14,7 +14,7 @@ import reactor.core.publisher.Mono
 @Component
 class OmdbClient(private val apiProperties: OmdbApiProperties) {
 
-    @Cacheable("omdbDetails")
+    @Cacheable("imdbId")
     fun retrieveMovieDetails(imdbId: String): Mono<OmdbResponse> {
         val sw = StopWatch()
         sw.start()

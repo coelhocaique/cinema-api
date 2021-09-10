@@ -12,11 +12,6 @@ plugins {
 apply(plugin = "org.springframework.boot")
 apply(plugin = "application")
 
-//tasks.getByName<org.springframework.boot.gradle.tasks.run.BootRun>("bootRun") {
-//    mainClass.set("com.coelhocaique.cinema.api.ApiStarterKt")
-//    systemProperties(System.getProperties().mapKeys { it.key as String })
-//}
-
 application{
     mainClass.set("com.coelhocaique.cinema.api.ApiStarterKt")
 }
@@ -28,7 +23,7 @@ dependencies {
     implementation(project(":cinema-core"))
     implementation("org.springframework.boot:spring-boot-starter-webflux:${DependencyVersions.SPRING_VERSION}")
     implementation("org.springframework.boot:spring-boot-starter-actuator:${DependencyVersions.SPRING_VERSION}")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.9.9")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.12.5")
     testImplementation("org.springframework.boot:spring-boot-starter-test:${DependencyVersions.SPRING_VERSION}")
     implementation(kotlin("stdlib-jdk8"))
     testImplementation("io.rest-assured:rest-assured:4.4.0")
