@@ -2,7 +2,6 @@ package com.coelhocaique.cinema.core.util
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import java.time.LocalDate
 import java.util.UUID
 
 fun <T : Any> T.logger(): Logger = LoggerFactory.getLogger(javaClass)

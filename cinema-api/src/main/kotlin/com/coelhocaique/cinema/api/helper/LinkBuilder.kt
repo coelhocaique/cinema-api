@@ -10,6 +10,7 @@ import org.springframework.http.HttpMethod.POST
 import org.springframework.web.reactive.function.server.ServerRequest
 import reactor.core.publisher.Mono
 import reactor.core.publisher.Mono.just
+import java.time.LocalDateTime
 
 object LinkBuilder {
 
@@ -40,6 +41,7 @@ object LinkBuilder {
     private fun addMovieSessionResponseLinks(uri: String, response: MovieSessionResponse): MovieSessionResponse {
         val links = listOf(
             mapLink(GET, uri.plus("movies/${response.movieId}")),
+            mapLink(GET, uri.plus("movies/${response.movieId}/sessions?dateTime=${LocalDateTime.now()}")),
             mapLink(POST,uri.plus("movies/${response.movieId}/sessions")),
             mapLink(DELETE,uri.plus("movies/${response.movieId}/sessions/${response.id}"))
         )
@@ -62,6 +64,7 @@ object LinkBuilder {
             mapLink(GET, uri.plus("movies")),
             mapLink(GET, uri.plus("movies/${response.id}")),
             mapLink(GET, uri.plus("movies/${response.id}/sessions")),
+            mapLink(GET, uri.plus("movies/${response.id}/sessions?dateTime=${LocalDateTime.now()}")),
             mapLink(POST,uri.plus("movies/${response.id}/sessions")),
             mapLink(GET, uri.plus("movies/${response.id}/reviews")),
             mapLink(POST,uri.plus("movies/${response.id}/reviews")),
@@ -71,8 +74,8 @@ object LinkBuilder {
     }
     
     private fun extractBaseUri(req: ServerRequest): String {
-        val uri = req.uri()
-        return uri.toString().replace(uri.path, "/")
+        val uri = req.uri().toURL()
+        return uri.toString().replace(uri.file, "/")
     }
     
     private fun mapLink(method: HttpMethod, href: String) = mapOf("method" to method.name, "href" to href)

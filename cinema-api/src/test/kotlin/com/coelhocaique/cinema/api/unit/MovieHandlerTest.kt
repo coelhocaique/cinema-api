@@ -1,7 +1,7 @@
 package com.coelhocaique.cinema.api.unit
 
 import com.coelhocaique.cinema.api.handler.MovieHandler
-import com.coelhocaique.cinema.api.handler.RequestParameterHandler
+import com.coelhocaique.cinema.api.helper.RequestParameterHandler
 import com.coelhocaique.cinema.api.helper.LinkBuilder
 import com.coelhocaique.cinema.api.mock.mockMovieResponse
 import com.coelhocaique.cinema.core.service.movie.MovieService
@@ -42,6 +42,7 @@ class MovieHandlerTest {
 
         every { RequestParameterHandler.retrieveId(serverRequest) } answers { just(uuid) }
         every { service.findById(uuid) } answers { just(response) }
+        every { LinkBuilder.addMovieResponseLinks(serverRequest, response) } answers { just(response) }
 
         StepVerifier.create(handler.findById(serverRequest))
             .assertNext {
@@ -51,6 +52,7 @@ class MovieHandlerTest {
 
         verify(exactly = 1) { service.findById(uuid) }
         verify(exactly = 1) { RequestParameterHandler.retrieveId(eq(serverRequest)) }
+        verify(exactly = 1) { LinkBuilder.addMovieResponseLinks(serverRequest, response) }
     }
 
     @Test
@@ -64,7 +66,7 @@ class MovieHandlerTest {
 
         StepVerifier.create(handler.findById(serverRequest))
             .assertNext {
-                assertEquals(HttpStatus.NOT_FOUND, it.statusCode())
+                assertEquals(HttpStatus.BAD_REQUEST, it.statusCode())
             }
             .verifyComplete()
 
@@ -78,9 +80,10 @@ class MovieHandlerTest {
         val serverRequest = mockk<ServerRequest>()
         val handler = MovieHandler(service)
 
-        val response = mockMovieResponse()
+        val response = listOf(mockMovieResponse())
 
-        every { service.findAll() } answers { just(listOf(response)) }
+        every { service.findAll() } answers { just(response) }
+        every { LinkBuilder.addMovieResponseLinks(serverRequest, response) } answers { just(response) }
 
         StepVerifier.create(handler.findAll(serverRequest))
             .assertNext {
@@ -90,6 +93,7 @@ class MovieHandlerTest {
 
         verify(exactly = 1) { service.findAll() }
         verify { RequestParameterHandler.retrieveId(eq(serverRequest)) wasNot Called }
+        verify(exactly = 1) { LinkBuilder.addMovieResponseLinks(serverRequest, response) }
     }
 
     @Test

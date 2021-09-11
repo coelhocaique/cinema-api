@@ -1,8 +1,10 @@
 package com.coelhocaique.cinema.core.service.movie.client
 
 import com.coelhocaique.cinema.core.config.properties.OmdbApiProperties
+import com.coelhocaique.cinema.core.util.exception.CoreException.CoreExceptionHelper.imdbNotFound
 import com.coelhocaique.cinema.core.util.logger
 import org.springframework.cache.annotation.Cacheable
+import org.springframework.core.codec.DecodingException
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Component
@@ -32,7 +34,10 @@ class OmdbClient(private val apiProperties: OmdbApiProperties) {
         sw.stop()
         logger().info("M=retrieveMovieDetails, imdbId=$imdbId, stage=success, time=${sw.lastTaskTimeMillis}")
 
-        return response.bodyToMono()
+        return response.bodyToMono<OmdbResponse>()
+            .doOnError {
+                if (it is DecodingException)
+                    throw imdbNotFound(imdbId)
+            }
     }
-
 }

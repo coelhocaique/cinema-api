@@ -1,12 +1,11 @@
 package com.coelhocaique.cinema.api.handler
 
-import com.coelhocaique.cinema.api.handler.RequestParameterHandler.extractBody
-import com.coelhocaique.cinema.api.handler.RequestParameterHandler.retrieveId
+import com.coelhocaique.cinema.api.helper.RequestParameterHandler.extractBody
+import com.coelhocaique.cinema.api.helper.RequestParameterHandler.retrieveId
 import com.coelhocaique.cinema.api.helper.LinkBuilder.addMovieResponseLinks
 import com.coelhocaique.cinema.api.helper.ResponseHandler.generateResponse
 import com.coelhocaique.cinema.core.service.movie.MovieRequest
 import com.coelhocaique.cinema.core.service.movie.MovieService
-import com.coelhocaique.cinema.core.service.review.ReviewRequest
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.server.ServerRequest
@@ -26,7 +25,7 @@ class MovieHandler(private val movieService: MovieService) {
     fun findAll(req: ServerRequest): Mono<ServerResponse> {
         return movieService.findAll()
             .flatMap { addMovieResponseLinks(req, it)}
-            .let { generateResponse(it, onEmptyStatus = HttpStatus.OK.value()) }
+            .let { generateResponse(it, onEmptyStatus = HttpStatus.OK) }
     }
 
     fun create(req: ServerRequest): Mono<ServerResponse> {

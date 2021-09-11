@@ -1,13 +1,15 @@
 package com.coelhocaique.cinema.api.helper.exception
 
+import org.springframework.http.HttpStatus
+
 data class ApiException(
         val type: ExceptionType,
         val errorMessage: String? = null,
         val ex: Throwable? = null
 ) : RuntimeException(ex) {
 
-    enum class ExceptionType(val status: Int) {
-        BUSINESS_EXCEPTION(400),
+    enum class ExceptionType(val status: HttpStatus) {
+        BUSINESS_EXCEPTION(HttpStatus.BAD_REQUEST),
     }
 
     companion object ApiExceptionHelper {

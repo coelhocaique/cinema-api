@@ -240,7 +240,7 @@ paths:
     post:
       tags:
         - movie-reviews
-      summary: create a new movie review
+      summary: Create a new movie review
       operationId: create-movie-review
       parameters:
         - name: movieId

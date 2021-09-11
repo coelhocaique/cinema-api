@@ -1,7 +1,8 @@
 package com.coelhocaique.cinema.api.unit
 
 import com.coelhocaique.cinema.api.handler.MovieSessionHandler
-import com.coelhocaique.cinema.api.handler.RequestParameterHandler
+import com.coelhocaique.cinema.api.helper.FetchCriteria
+import com.coelhocaique.cinema.api.helper.RequestParameterHandler
 import com.coelhocaique.cinema.api.helper.LinkBuilder
 import com.coelhocaique.cinema.api.mock.mockMovieSessionRequest
 import com.coelhocaique.cinema.api.mock.mockMovieSessionResponse
@@ -21,6 +22,7 @@ import org.springframework.web.reactive.function.server.ServerRequest
 import reactor.core.publisher.Mono.empty
 import reactor.core.publisher.Mono.just
 import reactor.test.StepVerifier
+import java.time.LocalDateTime
 import java.util.UUID
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -35,14 +37,16 @@ class MovieSessionHandlerTest {
     }
 
     @Test
-    fun testFindById() {
+    fun testFindByMovieId() {
         val service = mockk<MovieSessionService>()
         val serverRequest = mockk<ServerRequest>()
         val handler = MovieSessionHandler(service)
-        val response = mockMovieSessionResponse()
+        val response = listOf(mockMovieSessionResponse())
+        val fetchCriteria = FetchCriteria(uuid, uuid)
 
-        every { RequestParameterHandler.retrieveMovieId(serverRequest) } answers { just(uuid) }
-        every { service.findByMovieId(uuid) } answers { just(listOf(response)) }
+        every { RequestParameterHandler.retrieveSessionParameters(serverRequest) } answers { just(fetchCriteria) }
+        every { service.find(uuid) } answers { just(response) }
+        every { LinkBuilder.addMovieSessionResponseLinks(serverRequest, response) } answers { just(response) }
 
         StepVerifier.create(handler.findByMovieId(serverRequest))
             .assertNext {
@@ -50,18 +54,21 @@ class MovieSessionHandlerTest {
             }
             .verifyComplete()
 
-        verify(exactly = 1) { service.findByMovieId(uuid) }
-        verify(exactly = 1) { RequestParameterHandler.retrieveMovieId(eq(serverRequest)) }
+        verify(exactly = 1) { service.find(uuid) }
+        verify(exactly = 1) { RequestParameterHandler.retrieveSessionParameters(eq(serverRequest)) }
     }
 
     @Test
-    fun testFindByIdWhenNoDataFound() {
+    fun testFindByMovieIdAndDateTime() {
         val service = mockk<MovieSessionService>()
         val serverRequest = mockk<ServerRequest>()
         val handler = MovieSessionHandler(service)
+        val response = listOf(mockMovieSessionResponse())
+        val fetchCriteria = FetchCriteria(uuid, uuid, LocalDateTime.now())
 
-        every { RequestParameterHandler.retrieveMovieId(serverRequest) } answers { just(uuid) }
-        every { service.findByMovieId(uuid) } answers { empty() }
+        every { RequestParameterHandler.retrieveSessionParameters(serverRequest) } answers { just(fetchCriteria) }
+        every { service.find(uuid, fetchCriteria.dateTime!!) } answers { just(response) }
+        every { LinkBuilder.addMovieSessionResponseLinks(serverRequest, response) } answers { just(response) }
 
         StepVerifier.create(handler.findByMovieId(serverRequest))
             .assertNext {
@@ -69,8 +76,28 @@ class MovieSessionHandlerTest {
             }
             .verifyComplete()
 
-        verify(exactly = 1) { service.findByMovieId(uuid) }
-        verify(exactly = 1) { RequestParameterHandler.retrieveMovieId(eq(serverRequest)) }
+        verify(exactly = 1) { service.find(uuid, fetchCriteria.dateTime!!) }
+        verify(exactly = 1) { RequestParameterHandler.retrieveSessionParameters(eq(serverRequest)) }
+    }
+
+    @Test
+    fun testFindByMovieIdWhenNoDataFound() {
+        val service = mockk<MovieSessionService>()
+        val serverRequest = mockk<ServerRequest>()
+        val handler = MovieSessionHandler(service)
+        val fetchCriteria = FetchCriteria(uuid, uuid)
+
+        every { RequestParameterHandler.retrieveSessionParameters(serverRequest) } answers { just(fetchCriteria) }
+        every { service.find(uuid) } answers { empty() }
+
+        StepVerifier.create(handler.findByMovieId(serverRequest))
+            .assertNext {
+                assertEquals(HttpStatus.OK, it.statusCode())
+            }
+            .verifyComplete()
+
+        verify(exactly = 1) { service.find(uuid) }
+        verify(exactly = 1) { RequestParameterHandler.retrieveSessionParameters(eq(serverRequest)) }
     }
 
     @Test
@@ -84,6 +111,7 @@ class MovieSessionHandlerTest {
         every { serverRequest.bodyToMono(MovieSessionRequest::class.java) } answers { just(request) }
         every { RequestParameterHandler.retrieveMovieId(serverRequest) } answers { just(uuid) }
         every { service.create(uuid, request) } answers { just(response) }
+        every { LinkBuilder.addMovieSessionResponseLinks(serverRequest, response) } answers { just(response) }
 
         StepVerifier.create(handler.create(serverRequest))
             .assertNext {
@@ -153,7 +181,7 @@ class MovieSessionHandlerTest {
 
         StepVerifier.create(handler.delete(serverRequest))
             .assertNext {
-                assertEquals(HttpStatus.NOT_FOUND, it.statusCode())
+                assertEquals(HttpStatus.BAD_REQUEST, it.statusCode())
             }
             .verifyComplete()
 

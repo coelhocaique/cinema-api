@@ -6,6 +6,7 @@ import com.coelhocaique.cinema.core.service.session.MovieSessionMapper.toMovieSe
 import com.coelhocaique.cinema.core.persistance.MovieSessionRepository
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Mono
+import java.time.LocalDateTime
 import java.util.UUID
 
 @Service
@@ -13,10 +14,17 @@ class MovieSessionService(
     private val movieSessionRepository: MovieSessionRepository,
     private val movieService: MovieService
 ) {
-    fun findByMovieId(movieId: UUID): Mono<List<MovieSessionResponse>> {
+
+    fun find(movieId: UUID): Mono<List<MovieSessionResponse>> {
         return movieSessionRepository.findByMovieIdAndActive(movieId, true)
                     .flatMap { toMovieSessionResponse(it) }
                     .collectList()
+    }
+
+    fun find(movieId: UUID, dateTime: LocalDateTime): Mono<List<MovieSessionResponse>> {
+        return movieSessionRepository.findByMovieIdAndDateAndTimeGreaterThanEqualAndActive(movieId, dateTime.toLocalDate(), dateTime.toLocalTime(), true)
+            .flatMap { toMovieSessionResponse(it) }
+            .collectList()
     }
 
     fun create(movieId: UUID, request: MovieSessionRequest): Mono<MovieSessionResponse> {

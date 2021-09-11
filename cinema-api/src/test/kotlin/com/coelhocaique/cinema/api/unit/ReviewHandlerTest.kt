@@ -1,6 +1,6 @@
 package com.coelhocaique.cinema.api.unit
 
-import com.coelhocaique.cinema.api.handler.RequestParameterHandler
+import com.coelhocaique.cinema.api.helper.RequestParameterHandler
 import com.coelhocaique.cinema.api.handler.ReviewHandler
 import com.coelhocaique.cinema.api.helper.LinkBuilder
 import com.coelhocaique.cinema.api.mock.mockMovieReviewResponse
@@ -41,10 +41,11 @@ class ReviewHandlerTest {
         val serverRequest = mockk<ServerRequest>()
         val handler = ReviewHandler(service)
 
-        val response = mockMovieReviewResponse()
+        val response = listOf(mockMovieReviewResponse())
 
         every { RequestParameterHandler.retrieveMovieId(serverRequest) } answers { just(uuid) }
-        every { service.find(uuid, ReviewType.MOVIE) } answers { just(listOf(response)) }
+        every { service.findMovieReview(uuid) } answers { just(response) }
+        every { LinkBuilder.addReviewResponseLinks(serverRequest, response) } answers { just(response) }
 
         StepVerifier.create(handler.findMovieReviews(serverRequest))
             .assertNext {
@@ -52,8 +53,9 @@ class ReviewHandlerTest {
             }
             .verifyComplete()
 
-        verify(exactly = 1) { service.find(uuid, ReviewType.MOVIE) }
+        verify(exactly = 1) { service.findMovieReview(uuid) }
         verify(exactly = 1) { RequestParameterHandler.retrieveMovieId(eq(serverRequest)) }
+        verify(exactly = 1) { LinkBuilder.addReviewResponseLinks(serverRequest, response) }
     }
 
     @Test
@@ -63,7 +65,7 @@ class ReviewHandlerTest {
         val handler = ReviewHandler(service)
 
         every { RequestParameterHandler.retrieveMovieId(serverRequest) } answers { just(uuid) }
-        every { service.find(uuid, ReviewType.MOVIE) } answers { empty() }
+        every { service.findMovieReview(uuid) } answers { empty() }
 
         StepVerifier.create(handler.findMovieReviews(serverRequest))
             .assertNext {
@@ -71,7 +73,7 @@ class ReviewHandlerTest {
             }
             .verifyComplete()
 
-        verify(exactly = 1) { service.find(uuid, ReviewType.MOVIE) }
+        verify(exactly = 1) { service.findMovieReview(uuid) }
         verify(exactly = 1) { RequestParameterHandler.retrieveMovieId(eq(serverRequest)) }
     }
 
@@ -86,6 +88,7 @@ class ReviewHandlerTest {
         every { serverRequest.bodyToMono(ReviewRequest::class.java) } answers { just(request) }
         every { RequestParameterHandler.retrieveMovieId(serverRequest) } answers { just(uuid) }
         every { service.createMovieReview(uuid, request) } answers { just(response) }
+        every { LinkBuilder.addReviewResponseLinks(serverRequest, response) } answers { just(response) }
 
         StepVerifier.create(handler.createMovieReview(serverRequest))
             .assertNext {
@@ -96,6 +99,7 @@ class ReviewHandlerTest {
         verify(exactly = 1) { service.createMovieReview(uuid, request) }
         verify(exactly = 1) { RequestParameterHandler.retrieveMovieId(eq(serverRequest)) }
         verify(exactly = 1) { serverRequest.bodyToMono(ReviewRequest::class.java) }
+        verify(exactly = 1) { LinkBuilder.addReviewResponseLinks(serverRequest, response) }
     }
 
     @Test
