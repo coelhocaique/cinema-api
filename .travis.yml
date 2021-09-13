@@ -3,7 +3,7 @@ install: true
 
 os: linux
 dist: trusty
-jdk: oraclejdk14
+jdk: oraclejdk16
 
 script:
   - ./gradlew clean --stacktrace --info

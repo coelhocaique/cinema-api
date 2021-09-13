@@ -3,20 +3,10 @@ info:
   title: Cinema API
   description: >
     # Author
-
     <strong>Caique Dos Santos Coelho, Computer Scientist.<br/>
     [Linkedin profile](https://www.linkedin.com/in/coelhocaiquesantos96) <br/>
     [Github profile](https://github.com/coelhocaique)
     </strong>
-
-    # Project
-
-    <strong>
-    [Documentation](https://github.com/coelhocaique/personal-finance-api/wiki)<br/>
-    [Github repository](https://github.com/coelhocaique/personal-finance-api)<br/>
-    [Docker hub repository](https://hub.docker.com/repository/docker/coelhocaique/personal-finance-api)
-    <br/><br/>
-
     </strong>
 
   version: 1.0.0
@@ -178,6 +168,12 @@ paths:
           schema:
             type: string
             format: uuid
+        - name: dateTime
+          in: query
+          description: With this parameter you can query movie sessions on specified date with time greater than equal the time informed
+          schema:
+            type: string
+            format: YYYY-MM-DDTHH:MM:SS
       responses:
         '200':
           description: successful operation
