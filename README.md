@@ -1,4 +1,6 @@
 # Cinema API
+[![Build Status](https://travis-ci.com/coelhocaique/cinema-api.svg?branch=master)](https://travis-ci.com/coelhocaique/cinema-api)
+[![Code Coverage](https://codecov.io/github/coelhocaique/cinema-api/coverage.svg)](https://codecov.io/gh/coelhocaique/cinema-api)
 
 ## Technologies Used
 
@@ -103,7 +105,7 @@ Although the challenge requirement did not ask, I created extra APIs that can be
    * ``` POST /movies``` an API to create available movies.
    * ``` GET /movies/{movieId}/sessions?dateTime=2021-09-13T14:00:00``` an API to retrieve movie session for a specific date and time greater than equal the time informed.
 
-I also added integration with [Travis CI](https://www.travis-ci.com/) so after each commit, a pipeline runs to validate the changes.
+I also added integration with [Travis CI](https://www.travis-ci.com/) so after each commit, a pipeline runs to validate the changes and sends the tests result to [CodeCov](https://about.codecov.io/) to evaluate the tests coverage.
 
 ### What can be improved?
 
