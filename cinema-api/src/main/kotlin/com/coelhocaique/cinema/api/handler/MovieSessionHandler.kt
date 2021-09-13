@@ -23,8 +23,8 @@ class MovieSessionHandler(private val movieSessionService: MovieSessionService) 
         return retrieveSessionParameters(req)
             .flatMap {
                 when (it.searchType()) {
-                    DATE_TIME -> movieSessionService.find(it.movieId!!, it.dateTime!!)
-                    else -> movieSessionService.find(it.movieId!!)
+                    DATE_TIME -> movieSessionService.findByMovieIdAndDateTime(it.movieId!!, it.dateTime!!)
+                    else -> movieSessionService.findByMovieId(it.movieId!!)
                 }
             }
             .flatMap { addMovieSessionResponseLinks(req, it) }
@@ -42,6 +42,6 @@ class MovieSessionHandler(private val movieSessionService: MovieSessionService) 
     fun delete(req: ServerRequest): Mono<ServerResponse> {
         return retrieveMovieId(req).zipWith(retrieveId(req))
             .flatMap { movieSessionService.delete(it.t1, it.t2) }
-            .let { generateResponse(it, successStatus = HttpStatus.NO_CONTENT) }
+            .let { generateResponse(it, onEmptyStatus = HttpStatus.NO_CONTENT) }
     }
 }

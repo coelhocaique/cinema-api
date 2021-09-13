@@ -11,27 +11,26 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
 
-import org.junit.jupiter.api.TestInstance
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono.empty
 import reactor.core.publisher.Mono.just
 import reactor.test.StepVerifier
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class MovieServiceTest {
 
     @Test
     fun testFindById() {
         val omdbClient = mockk<OmdbClient>()
-        val movieRepository = mockk<MovieRepository>()
-        val service = MovieService(movieRepository, omdbClient)
+        val repository = mockk<MovieRepository>()
+        val service = MovieService(repository, omdbClient)
         val omdbResponse = mockOmdbResponse()
         val document = mockMovieDocument()
         val id = document.id
 
-        every { movieRepository.findById(id) } answers { just(document) }
+        every { repository.findById(id) } answers { just(document) }
         every { omdbClient.retrieveMovieDetails(document.imdbId) } answers { just(omdbResponse) }
 
         StepVerifier.create(service.findById(id))
@@ -45,20 +44,21 @@ class MovieServiceTest {
             }
             .verifyComplete()
 
-
-        verify(exactly = 1) { movieRepository.findById(id) }
-        verify(exactly = 1) { omdbClient.retrieveMovieDetails(document.imdbId) }
+        verify(exactly = 1) {
+            repository.findById(id)
+            omdbClient.retrieveMovieDetails(document.imdbId)
+        }
     }
 
     @Test
     fun findAll() {
         val omdbClient = mockk<OmdbClient>()
-        val movieRepository = mockk<MovieRepository>()
-        val service = MovieService(movieRepository, omdbClient)
+        val repository = mockk<MovieRepository>()
+        val service = MovieService(repository, omdbClient)
         val omdbResponse = mockOmdbResponse()
         val document = mockMovieDocument()
 
-        every { movieRepository.findAll() } answers { Flux.just(document) }
+        every { repository.findAll() } answers { Flux.just(document) }
         every { omdbClient.retrieveMovieDetails(document.imdbId) } answers { just(omdbResponse) }
 
         StepVerifier.create(service.findAll())
@@ -73,26 +73,28 @@ class MovieServiceTest {
             }
             .verifyComplete()
 
-        verify(exactly = 1) { movieRepository.findAll() }
-        verify(exactly = 1) { omdbClient.retrieveMovieDetails(document.imdbId) }
+        verify(exactly = 1) {
+            repository.findAll()
+            omdbClient.retrieveMovieDetails(document.imdbId)
+        }
     }
 
     @Test
     fun create() {
         val omdbClient = mockk<OmdbClient>()
-        val movieRepository = mockk<MovieRepository>()
-        val service = MovieService(movieRepository, omdbClient)
+        val repository = mockk<MovieRepository>()
+        val service = MovieService(repository, omdbClient)
         val omdbResponse = mockOmdbResponse()
-        val document = mockMovieDocument()
         val movieRequest = mockMovieRequest()
+        val imdbId = movieRequest.imdbId!!
 
-        every { movieRepository.findByImdbId(movieRequest.imdbId!!) } answers { empty() }
-        every { omdbClient.retrieveMovieDetails(document.imdbId) } answers { just(omdbResponse) }
-        every { movieRepository.insert(any() as MovieDocument) } answers { just(document) }
+        every { repository.findByImdbId(imdbId) } answers { empty() }
+        every { omdbClient.retrieveMovieDetails(imdbId) } answers { just(omdbResponse) }
+        every { repository.insert(any() as MovieDocument) } answers { just(it.invocation.args[0] as MovieDocument) }
 
         StepVerifier.create(service.create(movieRequest))
             .assertNext {
-                assertEquals(document.id, it.id)
+                assertNotNull(it.id)
                 assertEquals(omdbResponse.title, it.title)
                 assertEquals(omdbResponse.imdbRating, it.imdbRating)
                 assertEquals(omdbResponse.runtime, it.runtime)
@@ -101,9 +103,10 @@ class MovieServiceTest {
             }
             .verifyComplete()
 
-
-        verify(exactly = 1) { movieRepository.findByImdbId(movieRequest.imdbId!!) }
-        verify(exactly = 1) { omdbClient.retrieveMovieDetails(document.imdbId) }
-        verify(exactly = 1) { movieRepository.insert(any() as MovieDocument) }
+        verify(exactly = 1) {
+            repository.findByImdbId(imdbId)
+            omdbClient.retrieveMovieDetails(imdbId)
+            repository.insert(any() as MovieDocument)
+        }
     }
 }

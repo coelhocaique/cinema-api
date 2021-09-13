@@ -34,17 +34,21 @@ class MovieService(private val movieRepository: MovieRepository,
 
     fun create(movieRequest: MovieRequest): Mono<MovieResponse> {
         return validate(movieRequest)
-            .flatMap { toMovieDocument(it.t2).zipWith(just(it.t2)) }
+            .flatMap { toMovieDocument(it).zipWith(just(it)) }
             .flatMap { movieRepository.insert(it.t1).zipWith(just(it.t2)) }
             .flatMap { toMovieResponse(it.t1, it.t2) }
     }
 
-    private fun validate(movieRequest: MovieRequest): Mono<Tuple2<MovieDocument, OmdbResponse>> =
-        omdbClient.retrieveMovieDetails(movieRequest.imdbId!!)
-            .flatMap { movieRepository.findByImdbId(it.imdbId).zipWith(just(it)) }
-            .doOnNext { movie ->
-                if (movie != null) {
-                    throw imdbAlreadyExists(movie.t1.imdbId)
+    private fun validate(movieRequest: MovieRequest): Mono<OmdbResponse> {
+        val movieExists = movieRepository.findByImdbId(movieRequest.imdbId!!)
+            .flatMap { just(true) }
+            .switchIfEmpty(just(false))
+
+        return movieExists.flatMap { exists ->
+                if (exists) {
+                    throw imdbAlreadyExists(movieRequest.imdbId)
                 }
+                omdbClient.retrieveMovieDetails(movieRequest.imdbId)
             }
+    }
 }

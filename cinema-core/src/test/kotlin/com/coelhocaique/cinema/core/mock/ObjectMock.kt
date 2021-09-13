@@ -1,11 +1,14 @@
 package com.coelhocaique.cinema.core.mock
 
 import com.coelhocaique.cinema.core.persistance.MovieDocument
+import com.coelhocaique.cinema.core.persistance.MovieSessionDocument
+import com.coelhocaique.cinema.core.persistance.ReviewDocument
 import com.coelhocaique.cinema.core.service.movie.MovieRequest
 import com.coelhocaique.cinema.core.service.movie.MovieResponse
 import com.coelhocaique.cinema.core.service.movie.client.OmdbResponse
 import com.coelhocaique.cinema.core.service.review.ReviewRequest
 import com.coelhocaique.cinema.core.service.review.ReviewResponse
+import com.coelhocaique.cinema.core.service.review.ReviewType
 import com.coelhocaique.cinema.core.service.session.MovieSessionRequest
 import com.coelhocaique.cinema.core.service.session.MovieSessionResponse
 import java.math.BigDecimal
@@ -50,6 +53,15 @@ fun mockMovieReviewResponse() = ReviewResponse(
     createdAt = LocalDateTime.now()
 )
 
+fun mockMovieReviewDocument() = ReviewDocument(
+    id = UUID.randomUUID(),
+    referenceId = UUID.randomUUID(),
+    type = ReviewType.MOVIE,
+    rating = 4.9,
+    comment = "Awesome Movie!",
+    createdAt = LocalDateTime.now()
+)
+
 fun mockReviewRequest() = ReviewRequest(
     rating = 4.9,
     comment = "Awesome Movie!"
@@ -62,6 +74,17 @@ fun mockMovieSessionResponse() = MovieSessionResponse(
     room = "A1",
     time = LocalTime.of(18, 1),
     date = LocalDate.of(2021, 9, 9)
+)
+
+fun mockMovieSessionDocument() = MovieSessionDocument(
+    id = UUID.randomUUID(),
+    movieId = UUID.randomUUID(),
+    price = BigDecimal.ONE,
+    room = "A1",
+    time = LocalTime.of(18, 1),
+    date = LocalDate.of(2021, 9, 9),
+    active = true,
+    createdAt = LocalDateTime.now()
 )
 
 fun mockMovieSessionRequest() = MovieSessionRequest(

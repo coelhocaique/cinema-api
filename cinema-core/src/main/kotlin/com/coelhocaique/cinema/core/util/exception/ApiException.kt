@@ -8,7 +8,8 @@ data class CoreException(
 ) : RuntimeException(ex) {
 
     companion object CoreExceptionHelper {
-        fun movieNotFound(id: UUID) = CoreException("Movie $id does not exist!")
+        fun movieSessionNotFound(id: UUID) = CoreException("Movie session $id not found!")
+        fun movieNotFound(id: UUID) = CoreException("Movie $id not found!")
         fun imdbNotFound(imdbId: String) = CoreException("IMDB $imdbId not found!")
         fun imdbAlreadyExists(imdbId: String) = CoreException("IMDB $imdbId already exists!")
     }
