@@ -67,7 +67,7 @@ object LinkBuilder {
             mapLink(GET, uri.plus("movies/${response.id}/sessions?dateTime=${LocalDateTime.now()}")),
             mapLink(POST,uri.plus("movies/${response.id}/sessions")),
             mapLink(GET, uri.plus("movies/${response.id}/reviews")),
-            mapLink(POST,uri.plus("movies/${response.id}/reviews")),
+            mapLink(POST,uri.plus("movies/${response.id}/reviews"))
         )
 
         return response.copy(links = links)

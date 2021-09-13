@@ -3,7 +3,7 @@ install: true
 
 os: linux
 dist: trusty
-jdk: oraclejdk16
+jdk: oraclejdk11
 
 script:
   - ./gradlew clean

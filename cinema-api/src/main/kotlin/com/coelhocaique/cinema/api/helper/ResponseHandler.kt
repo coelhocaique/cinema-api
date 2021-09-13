@@ -33,7 +33,7 @@ object ResponseHandler {
         logger().error("error=".plus(it.message), it)
         return ServerResponse
             .status(INTERNAL_SERVER_ERROR)
-            .bodyValue(buildErrorResponse(it.message))
+            .body(BodyInserters.fromObject(buildErrorResponse(it.message)))
     }
 
     private fun mapApiException(it: ApiException): Mono<ServerResponse> {
@@ -41,7 +41,7 @@ object ResponseHandler {
 
         return ServerResponse
             .status(it.type.status)
-            .bodyValue(buildErrorResponse(it.errorMessage))
+            .body(BodyInserters.fromObject(buildErrorResponse(it.errorMessage)))
     }
 
     private fun mapCoreException(it: CoreException): Mono<ServerResponse> {
@@ -49,13 +49,13 @@ object ResponseHandler {
 
         return ServerResponse
             .status(BAD_REQUEST)
-            .bodyValue(buildErrorResponse(it.errorMessage))
+            .body(BodyInserters.fromObject(buildErrorResponse(it.errorMessage)))
     }
 
     private fun <T> success(it: T, status: HttpStatus): Mono<ServerResponse> {
         return ServerResponse
             .status(status)
-            .body(BodyInserters.fromValue(it!!))
+            .body(BodyInserters.fromObject(it!!))
     }
 
     private fun buildErrorResponse(message: String?) = ErrorResponse(message ?: DEFAULT_ERROR_MESSAGE)

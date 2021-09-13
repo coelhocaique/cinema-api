@@ -4,7 +4,7 @@ plugins {
     kotlin("jvm")
 }
 object DependencyVersions {
-    const val SPRING_VERSION = "2.5.4"
+    const val SPRING_VERSION = "2.1.7.RELEASE"
 }
 
 dependencies {
@@ -20,9 +20,9 @@ repositories {
 }
 val compileKotlin: KotlinCompile by tasks
 compileKotlin.kotlinOptions {
-    jvmTarget = "16"
+    jvmTarget = "1.8"
 }
 val compileTestKotlin: KotlinCompile by tasks
 compileTestKotlin.kotlinOptions {
-    jvmTarget = "16"
+    jvmTarget = "1.8"
 }

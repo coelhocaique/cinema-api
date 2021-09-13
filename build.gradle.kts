@@ -1,9 +1,10 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("org.springframework.boot") version "2.5.4" apply false
-    kotlin("plugin.spring") version "1.5.21"
-    kotlin("jvm") version "1.5.21"
+    id("org.springframework.boot") version "2.1.7.RELEASE" apply false
+    id("org.sonarqube") version "2.7.1"
+    id("org.jetbrains.kotlin.plugin.spring") version "1.3.41"
+    kotlin("jvm") version "1.3.41"
     id("jacoco")
 }
 
@@ -19,8 +20,8 @@ subprojects{
 
     group = "com.coelhocaique"
     version = "0.0.1-SNAPSHOT"
-    java.sourceCompatibility = JavaVersion.VERSION_16
-    java.targetCompatibility = JavaVersion.VERSION_16
+    java.sourceCompatibility = JavaVersion.VERSION_11
+    java.targetCompatibility = JavaVersion.VERSION_11
 
     val developmentOnly by configurations.creating
     configurations {
@@ -37,11 +38,12 @@ subprojects{
     }
 
     dependencies {
-        implementation("org.jetbrains.kotlin:kotlin-reflect:1.5.21")
-        implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.21")
-        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")
-        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactive:1.5.2")
-        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.5.2")
+
+        implementation("org.jetbrains.kotlin:kotlin-reflect:1.3.41")
+        implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.3.41")
+        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.1")
+        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactive:1.3.1")
+        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.3.1")
         implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.10.0.pr3")
         implementation("com.fasterxml.jackson.module:jackson-module-parameter-names:2.10.0.pr3")
         implementation("com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.10.0.pr3")
@@ -52,23 +54,26 @@ subprojects{
         testImplementation("io.projectreactor:reactor-test:3.2.11.RELEASE")
     }
 
+    java.sourceCompatibility = JavaVersion.VERSION_11
+    java.targetCompatibility = JavaVersion.VERSION_11
+
     tasks.withType<KotlinCompile> {
         kotlinOptions {
             freeCompilerArgs = listOf("-Xjsr305=strict")
-            jvmTarget = "16"
+            jvmTarget = "11"
         }
     }
 
     val excludedClassesFromCoverageAnalysis = listOf(
-            "CoreConfiguration",
-            "Starter",
-            "Config",
-            "Scheduler",
-            "Repository",
-            "Exception",
-            "Constants",
-            "Routing",
-            "Filter"
+        "CoreConfiguration",
+        "Starter",
+        "Config",
+        "Scheduler",
+        "Repository",
+        "Exception",
+        "Constants",
+        "Routing",
+        "Filter"
     ).map { "**/*${it}**" }
 
     tasks.test {
@@ -81,10 +86,10 @@ subprojects{
         dependsOn(tasks.test)
 
         reports {
-            xml.required.set(true)
-            csv.required.set(true)
-            html.required.set(true)
-            html.outputLocation.set(file("${buildDir}/jacocoTestReport"))
+            xml.isEnabled = true
+            csv.isEnabled = false
+            html.isEnabled = true
+            html.destination = file("${buildDir}/jacocoTestReport")
         }
     }
 
@@ -92,7 +97,7 @@ subprojects{
         tasks.jacocoTestReport {
             classDirectories.setFrom(files(classDirectories.files.map {
                 fileTree("dir" to it,
-                        "excludes" to excludedClassesFromCoverageAnalysis
+                    "excludes" to excludedClassesFromCoverageAnalysis
                 )
             }))
         }
