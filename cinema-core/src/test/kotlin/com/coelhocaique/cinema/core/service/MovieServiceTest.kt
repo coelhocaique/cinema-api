@@ -80,7 +80,7 @@ class MovieServiceTest {
     }
 
     @Test
-    fun create() {
+    fun testCreate() {
         val omdbClient = mockk<OmdbClient>()
         val repository = mockk<MovieRepository>()
         val service = MovieService(repository, omdbClient)

@@ -1,6 +1,5 @@
-package com.coelhocaique.cinema.api.unit
+package com.coelhocaique.cinema.api.handler
 
-import com.coelhocaique.cinema.api.handler.MovieHandler
 import com.coelhocaique.cinema.api.helper.RequestParameterHandler
 import com.coelhocaique.cinema.api.helper.LinkBuilder
 import com.coelhocaique.cinema.api.mock.mockMovieResponse

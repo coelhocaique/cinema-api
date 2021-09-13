@@ -1,13 +1,11 @@
-package com.coelhocaique.cinema.api.unit
+package com.coelhocaique.cinema.api.handler
 
 import com.coelhocaique.cinema.api.helper.RequestParameterHandler
-import com.coelhocaique.cinema.api.handler.ReviewHandler
 import com.coelhocaique.cinema.api.helper.LinkBuilder
 import com.coelhocaique.cinema.api.mock.mockMovieReviewResponse
 import com.coelhocaique.cinema.api.mock.mockReviewRequest
 import com.coelhocaique.cinema.core.service.review.ReviewRequest
 import com.coelhocaique.cinema.core.service.review.ReviewService
-import com.coelhocaique.cinema.core.service.review.ReviewType
 import io.mockk.Called
 import io.mockk.every
 import io.mockk.mockk

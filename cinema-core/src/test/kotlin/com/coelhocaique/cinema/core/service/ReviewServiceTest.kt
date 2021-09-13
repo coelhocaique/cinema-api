@@ -21,7 +21,7 @@ import reactor.test.StepVerifier
 class ReviewServiceTest {
 
     @Test
-    fun findMovieReview() {
+    fun testFindMovieReview() {
         val movieService = mockk<MovieService>()
         val repository = mockk<ReviewRepository>()
         val service = ReviewService(repository, movieService)
@@ -46,7 +46,7 @@ class ReviewServiceTest {
     }
 
     @Test
-    fun createMovieReview() {
+    fun testCreateMovieReview() {
         val movieService = mockk<MovieService>()
         val repository = mockk<ReviewRepository>()
         val service = ReviewService(repository, movieService)

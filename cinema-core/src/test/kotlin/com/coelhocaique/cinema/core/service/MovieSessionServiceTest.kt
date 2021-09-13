@@ -77,7 +77,7 @@ class MovieSessionServiceTest {
     }
 
     @Test
-    fun create() {
+    fun testCreate() {
         val movieService = mockk<MovieService>()
         val repository = mockk<MovieSessionRepository>()
         val service = MovieSessionService(repository, movieService)
@@ -107,7 +107,7 @@ class MovieSessionServiceTest {
     }
 
     @Test
-    fun delete() {
+    fun testDelete() {
         val movieService = mockk<MovieService>()
         val repository = mockk<MovieSessionRepository>()
         val service = MovieSessionService(repository, movieService)
