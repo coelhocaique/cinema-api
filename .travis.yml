@@ -6,9 +6,9 @@ dist: trusty
 jdk: oraclejdk16
 
 script:
-  - ./gradlew clean --stacktrace --info
-  - ./gradlew build -x test --stacktrace --info
-  - ./gradlew test --stacktrace --info
+  - ./gradlew clean
+  - ./gradlew build -x test
+  - ./gradlew test
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
