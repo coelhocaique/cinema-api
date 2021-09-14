@@ -1,5 +1,5 @@
 # Cinema API
-[![Build Status](https://travis-ci.com/coelhocaique/cinema-api.svg?branch=master)](https://travis-ci.com/coelhocaique/cinema-api)
+[![Build Status](https://api.travis-ci.com/coelhocaique/cinema-api.svg?token=YqaCn7xqzpDLSUnpsbLy&branch=master)](https://travis-ci.com/coelhocaique/cinema-api)
 [![Code Coverage](https://codecov.io/github/coelhocaique/cinema-api/coverage.svg)](https://codecov.io/gh/coelhocaique/cinema-api)
 
 ## Technologies Used
