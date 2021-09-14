@@ -120,6 +120,7 @@ Although the challenge requirement did not ask, I created extra APIs that can be
 
 I also added integration with [Travis CI](https://www.travis-ci.com/) so after each commit, a pipeline runs to validate the changes and sends the tests result to [CodeCov](https://about.codecov.io/) to evaluate the test coverage of the project.
 
+Note: There is a problem with CodeCov Integration, it is not recognizing new repositories in my account, thats why the Codecov status is unknown, I'm trying to solve this problem.
 
 ### What can be improved?
 
