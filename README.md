@@ -38,6 +38,7 @@ After application is started you can access [Swagger Documentation](http://local
 
 You can also access the [Docker hub repository](https://hub.docker.com/repository/docker/coelhocaique/cinema-api)
 
+Note: Database is already populated with available movies, so it is good to start from http://localhost:8888/movies.
 ## About the solution
 
 For this project I chose to use Kotlin with Spring Reactive, because it is a stack I'm already familiar with, and provides full functional programming approach.
