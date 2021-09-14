@@ -33,6 +33,7 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.9.9")
     testImplementation("org.springframework.boot:spring-boot-starter-test:${DependencyVersions.SPRING_VERSION}")
     implementation(kotlin("stdlib-jdk8"))
+    implementation("org.springdoc:springdoc-openapi-webflux-ui:1.2.0")
 }
 repositories {
     mavenCentral()

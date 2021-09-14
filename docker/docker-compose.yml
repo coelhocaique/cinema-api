@@ -1,0 +1,5 @@
+cinema-api:
+  image: coelhocaique/cinema-api
+  container_name: cinema-api
+  ports:
+    - 8888:8888

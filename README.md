@@ -9,8 +9,6 @@
 * [Spring Web Flux](https://docs.spring.io/spring-framework/docs/5.0.0.BUILD-SNAPSHOT/spring-framework-reference/html/web-reactive.html)
 * [Mongo DB](https://www.mongodb.com/)
 
-## Introduction
-
 ## Run Tests
 
 Run locally with gradle:
@@ -25,7 +23,7 @@ Run locally with gradle:
 Run locally with gradle:
 
 ```
-./gradlew bootRun
+./gradlew bootRun -Djdk.tls.client.protocols=TLSv1.2
 
 ```
 Or run with [docker](https://docs.docker.com/get-docker/):
@@ -36,9 +34,9 @@ docker-compose up
 
 ## How to use the API
 
-After application is started you can access [Swagger Documentation](http://localhost:8888/swagger-ui/index/html)
+After application is started you can access [Swagger Documentation](http://localhost:8888/webjars/swagger-ui/index.html?url=/openapi.yaml)
 
-You can also access the [Docker hub repository](https://hub.docker.com/repository/docker/coelhocaique/personal-finance-api)
+You can also access the [Docker hub repository](https://hub.docker.com/repository/docker/coelhocaique/cinema-api)
 
 ## About the solution
 
@@ -58,13 +56,27 @@ as a dependency.
 So for example if an ***event-listener*** or a ***jobs*** modules is needed we only have to create these new subprojects
 and their DockerFile to generate separate images.
 
+### Integration with IMdb API
+
+I used the default token for integrating with OMdb API and as I noticed there are limited calls to the API, I added an in memory cache to avoid many calls.
+
+The cache can be easily disabled by uncommenting the line ```#spring.cache.type=None``` on ```core-application.properties```.
+
+### Hateoas pattern
+
+I also added Hateoas pattern in the API responses, so every comes with useful links for others resources.
+
+### The Mongo DB database
+
+I created a free cluster on [MongoDb Website](https://www.mongodb.com/cloud) for this project and the credentials are already on the application. 
+
 ### Application Domains
 
 I created the following domains/sub-domains for the application:
 
 * ***Movie***: An entity that represents a movie, has only the ImdbID mapped to it, since you have a movie created you can apply the other operations provided by the system.
 * ***Movie Session***: This entity is used to represent movie times and prices, so if you create a ***Movie Session*** you can already specify date, time, price and also a room if necessary. 
-* ***Review***: This entity is used to create review for movies, so you can leave a rating and an optional comment. 
+* ***Review***: This entity is used to create review for movies, so you can leave a rating and an optional comment.
 
 ##### The Mongo DB documents
 * ***Movie***:
@@ -105,13 +117,14 @@ Although the challenge requirement did not ask, I created extra APIs that can be
    * ``` POST /movies``` an API to create available movies.
    * ``` GET /movies/{movieId}/sessions?dateTime=2021-09-13T14:00:00``` an API to retrieve movie session for a specific date and time greater than equal the time informed.
 
-I also added integration with [Travis CI](https://www.travis-ci.com/) so after each commit, a pipeline runs to validate the changes and sends the tests result to [CodeCov](https://about.codecov.io/) to evaluate the tests coverage.
+I also added integration with [Travis CI](https://www.travis-ci.com/) so after each commit, a pipeline runs to validate the changes and sends the tests result to [CodeCov](https://about.codecov.io/) to evaluate the test coverage of the project.
+
 
 ### What can be improved?
 
 Although I did not have time to code, I wish I could've created integration test, but it would require more time to create the scenarios and apply all the necessary configurations to the application.  
 
-
+Also add a TTL for caching because it is never expiring.
 
 
 
